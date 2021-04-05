@@ -1,0 +1,73 @@
+    login_post_request_body = Schema(
+        title=None,  # 标题
+        description=None,  # 接口描述
+        type=None,  # 类型 "object" ,"string" ,"number" ,"integer" ,"boolean" ,"array" ,"file"
+        format=None,  # 格式    date,date-time,password,binary,bytes,float,double,int32,int64,email,ipv4, ipv6, uri, uuid, slug, decimal
+        enum=None,  # [列表]列举参数的请求值
+        pattern=None,  # 当 format为 string是才填此项
+        # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
+        properties=None,
+        required=None,  # [必须的属性列表]
+        items=None,  # 当type是array时，填此项
+    )
+    login_post_manual_parameters = Parameter(
+        name=None,  # 参数名称
+        in_=None,  # 参数位置
+        description=None,  # 参数描述
+        required=None,  # 是否必须
+        schema=None,  # 当in_是body时，schema对象
+        type=None,  # 类型 "object" ,"string" ,"number" ,"integer" ,"boolean" ,"array" ,"file"
+        format=None,  # 格式    date,date-time,password,binary,bytes,float,
+    )
+    login_post_responses_success = Response(
+        description='IDEvaluation_post_responses is success',
+        schema=Schema(
+            title='success message',
+            description='success message will return ',
+            type=TYPE_OBJECT,
+            properties={
+                'message': Schema(
+                    title='message',
+                    description='the specific message return express success',
+                    type=TYPE_STRING,
+                    format='string'
+                )
+            }
+        ),
+        examples={
+            'message': '修改成功'
+        }
+    )
+    login_post_responses_fail=Response(
+        description='IDEvaluation_post_responses is failure',
+        schema=Schema(
+            title='failure message',
+            description='successful message will return ',
+            type=TYPE_OBJECT,
+            properties={
+                'message': Schema(
+                    title='message',
+                    description='the specific message return express fail',
+                    type=TYPE_STRING,
+                    format='string'
+                )
+            }
+        ),
+        examples={
+            'message': patch_error
+        }
+    )
+    @swagger_auto_schema(
+        request_body=None,
+        manual_parameters=None,
+        operation_id=None,
+        operation_description= 'The api for login action',
+        operation_summary=None,
+        security= True,
+        responses={200:login_post_responses_success,401:login_post_responses_fail},
+        tags= None)
+' kind of id belonged to , 1 represents all kind of user, 2 represents to all kinds of equipment, 3 represents all kinds of course, 4 represents all kinds of record of attendance',
+
+
+
+HttpResponse(dumps({'message':'请勿空提交'}),status_code=401, content_type=content_type_tmp, charset='utf-8')

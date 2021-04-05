@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+<div class="page-header">
+  <h1>签到情况——<small>{{ lesson_obj }}</small>
+
+</h1>
+
+</div>
+
+
+<head>
+</head>
+<body>
+
+<div class="list-group">
+
+    <div class="row mb-3">
+      <div class="col-4 themed-grid-col" >签到时间</div>
+
+    </div>
+
+{% for lesson in lessons %}
+        <div class="row mb-3">
+
+{% if lesson.time is null %}
+    <div class="col-4 themed-grid-col">未签到</div>
+            <div class="col-4 themed-grid-col">{{ lesson }}</div>
+            <div class="col-4 themed-grid-col">{{ lesson.time }}</div>
+{% else %}
+    <div class="col-4 themed-grid-col">{{ lesson.time }}</div>
+{% endif %}
+            </div>
+        {% endfor %}
+
+</div>
+</body>
+<style type="text/css">
+    .list-group{opacity:0.7;background:white}
+</style>
+{% endblock %}

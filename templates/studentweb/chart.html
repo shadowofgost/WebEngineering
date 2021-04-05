@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<button type="button" class="btn btn-default" onclick="javascrtpt:window.location.href="http://10.20.7.53:85/polls/student/statistics/{{ lesson_obj.lesson_id }}">返回</button>
+        <div id="container" style="height: 1000%"></div>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+        <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+
+var option;
+option = {
+    title: {
+        text: '签到情况统计({{ lesson_obj.lesson_name }})',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+    },
+    series: [
+        {
+            type: 'pie',
+            radius: '80%',
+            label : {
+　　　　normal : {
+　　　　　　formatter: '{b}:{c} ({d}%)',
+　　　　　　textStyle : {
+　　　　　　　　fontWeight : 'normal',
+　　　　　　　　fontSize : 15
+　　　　　　}
+　　　　}
+　　},
+            data: [
+                {value:{{ tobestartnumber }}, name: '未开课'},
+                {value:{{ punctualnumber }}, name: '准时'},
+                {value:{{ latenumber }}, name: '迟到'},
+                {value:{{ absentnumber }}, name: '旷课'},
+            ],
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+
+if (option && typeof option === 'object') {
+    myChart.setOption(option);
+}
+        </script>
+
+{% endblock %}

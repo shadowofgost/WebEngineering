@@ -1,0 +1,57 @@
+{% load static %}
+  <head>
+
+    <!-- Bootstrap core CSS -->
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+  </head>
+  <body class="text-center">
+<img src="/static/img/1.jpg" width="100%" height="100%" style="z-index:-100;position:absolute;left:0;top:0">
+<main class="form-signin">
+  <form action="" method="post">
+    <h1 class="h3 mb-3 fw-normal">欢迎登录</h1>
+      <input type="text" id="id_username" class="form-control" name="username" placeholder="账号" required >
+      <input type="password" id="id_password" class="form-control" name="password"  placeholder="密码" required >
+    <input type="text" id="id_captchastr" class="form-control" name="captcha" style="width:200px; display: inline;" placeholder="验证码" required >
+        <a href="" class="captcha">
+            <img src="{{ captcha.image_url }}" alt="点击切换" id="id_captcha" >
+        </a> <br>
+        <input value="{{ captcha.hashkey }}" name="hashkey" type="hidden" id="id_captcha_0">
+    <br><br>
+<button class="w-100 btn btn-lg btn-primary" type="submit">登录</button>
+  </form>
+</main>
+
+<script>
+        <!-- 动态刷新验证码js -->
+        $(document).ready(function(){
+            $('.captcha').click(function () {
+                $.getJSON("refresh_captcha/", function (result) {
+                    $('#id_captcha').attr('src', result['image_url']);
+                    $('#id_captcha_0').val(result['hashkey'])
+                });
+            });
+        });
+</script>
+
+  </body>
+</html

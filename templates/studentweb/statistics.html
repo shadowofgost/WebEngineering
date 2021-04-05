@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>考勤信息查询
+
+</h1>
+<head>
+
+</head>
+<body>
+
+<div class="list-group">
+
+        {% for lesson in lessons %}
+  <a href="http://10.20.7.53:85/polls/student/statistics/{{ lesson.param2__id_curricula }}" class="list-group-item">{{ lesson.param2__id_curricula__name }}</a>
+{% endfor %}
+</div>
+</body>
+<style type="text/css">
+    .list-group{opacity:0.7}
+</style>
+{% endblock content %}

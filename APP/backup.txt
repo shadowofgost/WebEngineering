@@ -1,0 +1,836 @@
+    d = 'id_curricula'
+    CourseArrangement_put_data_schema = deepcopy(data_schema)
+    CourseArrangement_put_data_schema['id_location'] = Schema(
+        title='地点id',
+        description='课程上课的具体地点id号',
+        type=TYPE_INTEGER,
+        format='int32',
+        enum=None,
+    )
+    CourseArrangement_put_data_schema['id_speaker'] = Schema(
+        title='演讲者的id',
+        description='课程演讲者的id号',
+        type=TYPE_INTEGER,
+        format='int32',
+        enum=None,
+    )
+    CourseArrangement_put_data_schema['id_curricula'] = Schema(
+        title='课程的id',
+        description='课程安排表对应的课程id',
+        type=TYPE_INTEGER,
+        format='int32',
+        enum=None,
+    )
+    CourseArrangement_put_data_schema['idmanager'] = Schema(
+        title=' 管理员id ',
+        description=' 设置者的id账号',
+        type=TYPE_INTEGER,
+        format='int32',
+        enum=None,
+    ),
+    del CourseArrangement_put_data_schema['id_speaker__name']
+    del CourseArrangement_put_data_schema['id_location__name']
+    del CourseArrangement_put_data_schema['id_curricula__name']
+    del CourseArrangement_put_data_schema['idmanager__name']
+
+
+    CourseInformation_put_data_schema = deepcopy(data_schema)
+    CourseInformation_put_data_schema['id_location'] = Schema(
+        title='地点id',
+        description='课程上课的具体地点id号',
+        type=TYPE_INTEGER,
+        format='int32',
+        enum=None,
+    )
+    CourseInformation_put_data_schema['id_speaker'] = Schema(
+        title='演讲者的id',
+        description='课程演讲者的id号',
+        type=TYPE_INTEGER,
+        format='int32',
+        enum=None,
+    )
+    CourseInformation_put_data_schema['idmanager'] = Schema(
+        title=' 管理员id ',
+        description=' 设置者的id账号',
+        type=TYPE_INTEGER,
+        format='int32',
+        enum=None,
+    ),
+    del CourseInformation_put_data_schema['id_speaker__name']
+    del CourseInformation_put_data_schema['id_location__name']
+    del CourseInformation_put_data_schema['idmanager__name']
+
+
+
+
+'id_curricula__name', 'timebegin', 'timeend', 'id_location__name',
+            'id_speaker__name', 'attr', 'charge', 'pwaccess',
+            'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin',
+            'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend',
+            'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces',
+            'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
+def get_request_args(func):
+    def _get_request_args(self, request):
+        if request.method == 'GET':
+            args = request.GET
+        elif request.method == 'POST':
+            args = request.POST
+        elif request.method == 'PUT':
+            args = request.PUT
+        elif request.method == 'DELETE':
+            args = request.DELETE
+        elif request.method == 'PATCH':
+            args = request.PATCH
+        else:
+            body = request.body
+            if body:
+                try:
+                    args = loads(body)
+                except Exception as e:
+                    print(e)
+                    args = request.POST
+            else:
+                args = request.POST
+        return func(self, request,args,session)
+    return _get_request_args
+
+
+class TeachersInformation(EquipmentInformation):
+
+    '''
+    list
+    list all information about Equipment
+    '''
+    TeachersInformation_get_request_body = Schema(
+        title=None,  # 标题
+        description=None,  # 接口描述
+        type=TYPE_STRING,  # 类型 "object" ,"string" ,"number" ,"integer" ,"boolean" ,"array" ,"file"
+        format=None,  # 格式    date,date-time,password,binary,bytes,float,double,int32,int64,email,ipv4, ipv6, uri, uuid, slug, decimal
+        enum=None,  # [列表]列举参数的请求值
+        pattern=None,  # 当 format为 string是才填此项
+        # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
+        properties=None,
+        required=None,  # [必须的属性列表]
+        items=None,  # 当type是array时，填此项
+    )
+    TeachersInformation_get_responses_success = Response(
+        description='TeachersInformation_get_responses is success',
+        schema=get_responses_success,
+        examples=None
+    )
+    UsertInformation_get_responses_fail = Response(
+        description='IDEvaluation_post_responses is failure',
+        schema=responses_fail,
+        examples={
+            'message': patch_error
+        }
+    )
+
+    @swagger_auto_schema(
+        request_body=None,
+        manual_parameters=None,
+        operation_id=None,
+        operation_description='The api for get all user information',
+        operation_summary=None,
+        security=None,
+        responses={
+            200: TeachersInformation_get_responses_success,
+            401: UsertInformation_get_responses_fail
+        },
+        tags=None)
+    @get_request_args
+    def get(self, request,args,session):
+        is_login = request.COOKIES.get('is_login')
+        if not request.session.get(is_login, None):
+            return HttpResponse(dumps({'code': 0}),  content_type=content_type_tmp, charset='utf-8')
+        pages = args.get('page', 1)
+        limits = args.get('limits', 20)
+        data_user_information = models.TCyuser.objects.filter( attr = 4).values(
+            'id','nocard','nouser','name','psw','deptid__name','sex','attr','timeupdate','tcyuserex__timeupdate','tcyuserex__idmanager__name','tcyuserex__rem','tcyuserex__photo','localid'
+        )
+        if pages == 0 and limits == 0:
+            return data_total_response(data_user_information,pages,limits)
+        else:
+            return data_page_response(data_user_information, pages, limits)
+
+    '''
+    list
+    list all information about Equipment
+    '''
+    TeachersInformation_post_request_body = Schema(
+        title=' post request body for user ',  # 标题
+        description=' this is the actual data that front has to passed to the backend ',  # 接口描述
+        type=TYPE_OBJECT,  # 类型 "object" ,"string" ,"number" ,"integer" ,"boolean" ,"array" ,"file"
+        format=None,  # 格式    date,date-time,password,binary,bytes,float,double,int32,int64,email,ipv4, ipv6, uri, uuid, slug, decimal
+        enum=None,  # [列表]列举参数的请求值
+        pattern=None,  # 当 format为 string是才填此项
+        # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
+        properties=post_search,
+        required=['input_string'],  # [必须的属性列表]
+        items=None,  # 当type是array时，填此项
+    )
+    TeachersInformation_post_responses_success = Response(
+        description='TeachersInformation_post_responses is success',
+        schema=get_responses_success,
+        examples=None,
+    )
+    TeachersInformation_post_responses_fail = Response(
+        description='TeachersInformation_post_responses is failure',
+        schema=responses_fail,
+        examples={
+            'message': post_error
+        }
+    )
+
+    @swagger_auto_schema(
+        request_body=TeachersInformation_post_request_body,
+        manual_parameters=None,
+        operation_id=None,
+        operation_description='The api for search for all user inforamtion',
+        operation_summary=None,
+        security=None,
+        responses={
+            201: TeachersInformation_post_responses_success,
+            400: TeachersInformation_post_responses_fail
+        },
+        tags=None)
+    @get_request_args
+    def post(self, request,args,session):
+        is_login = request.COOKIES.get('is_login')
+        if not request.session.get(is_login, None):
+            return HttpResponse(dumps({'code': 0}),  content_type=content_type_tmp, charset='utf-8')
+        input_string = args.get('input_string', None)
+        pages = args.get('page', 1)
+        limits = args.get('limits', 20)
+        if input_string == None:
+            data_user_information = models.TCyuser.objects.all().values(
+            'id','nocard','nouser','name','psw','deptid__name','sex','attr','timeupdate','tcyuserex__timeupdate','tcyuserex__idmanager__name','tcyuserex__rem','tcyuserex__photo','localid')
+        else:
+            input_string = input_string.strip()
+            try:
+                test_input = eval(input_string)
+            except NameError:
+                test_input = input_string
+            if isinstance(test_input,int):
+                data_user_information = models.TCyuser.objects.filter(
+                    Q(id = test_input)|
+                    Q(nocard__icontains = str(test_input))|
+                    Q(nouser__icontains = str(test_input))|
+                    Q(deptid = test_input  )|
+                    Q(sex = test_input)|
+                    Q( attr = test_input)|
+                    Q( timeupdate = test_input )|
+                    Q( tcyuserex__timeupdate = test_input), attr = 4
+                ).values(
+                'id','nocard','nouser','name','psw','deptid__name','sex','attr','timeupdate','tcyuserex__timeupdate','tcyuserex__idmanager__name','tcyuserex__rem','tcyuserex__photo','localid')
+            else:
+                data_user_information = models.TCyuser.objects.filter(
+                    Q( name__icontains = input_string )|
+                    Q( psw__icontains = input_string )|
+                    Q( deptid__name = input_string )|
+                    Q( tcyuserex__idmanager__name = input_string )|
+                    Q(tcyuserex__rem = input_string), attr = 4
+                ).values(
+                'id','nocard','nouser','name','psw','deptid__name','sex','attr','timeupdate','tcyuserex__timeupdate','tcyuserex__idmanager__name','tcyuserex__rem','tcyuserex__photo','localid')
+        if pages == 0 and limits == 0:
+            return data_total_response(data_user_information, pages, limits)
+        else:
+            return data_page_response(data_user_information, pages, limits)
+
+
+
+################################################################################
+    EquipmentInformation_delete_request_body = Schema(
+        title=' delete equipment information ',  # 标题
+        description=' delete specific equipment information ,if there has many id, it should be list as id_1, id_2,id_3....',  # 接口描述
+        type=TYPE_OBJECT,  # 类型 "object" ,"string" ,"number" ,"integer" ,"boolean" ,"array" ,"file"
+        format=None,  # 格式    date,date-time,password,binary,bytes,float,double,int32,int64,email,ipv4, ipv6, uri, uuid, slug, decimal
+        enum=None,  # [列表]列举参数的请求值
+        pattern=None,  # 当 format为 string是才填此项
+        # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
+        properties=delete_schema,
+        required=['numbers','id_1'],  # [必须的属性列表]
+        items=None,  # 当type是array时，填此项
+    )
+    EquipmentInformation_delete_responses_success = Response(
+        description='EquipmentInformation_delete_responses is success',
+        schema=responses_success,
+        examples={
+            'message': '删除成功'
+        }
+    )
+    EquipmentInformation_delete_responses_fail = Response(
+        description='EquipmentInformation_delete_responses is failure',
+        schema=responses_fail,
+        examples={
+            'message': '删除失败，请输入正确的id'
+        }
+    )
+
+    @swagger_auto_schema(
+        request_body=EquipmentInformation_delete_request_body,
+        manual_parameters=None,
+        operation_id=None,
+        operation_description='The api for delete specific equipment',
+        operation_summary=None,
+        security=None,
+        responses={
+            204: EquipmentInformation_delete_request_body,
+            500: EquipmentInformation_delete_request_body
+        },
+        tags=None)
+    @get_request_args
+    def delete(self, request,args,session):
+        is_login = request.COOKIES.get('is_login')
+        if not request.session.get(is_login, None):
+            return HttpResponse(dumps({'code': 0}),  content_type=content_type_tmp, charset='utf-8')
+        variable_name = locals()
+        delete_data = args.get('user')
+        numbers_id = len(delete_data)
+        for i in range(numbers_id):
+            variable_name['id_'+str(i)] = delete_data[i].get('user_id')
+        try:
+            for i in range(1,numbers_id+1):
+                models.TCyequipment.objects.filter(id = variable_name.get('id_'+str(i),'id_1')).delete()
+            return HttpResponse(dumps({'message':'数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
+        except Exception as error:
+            return HttpResponse(dumps({'message': data_base_error_specific+str(error)}), content_type=content_type_tmp, charset='utf-8')
+################################################################################
+
+
+################################################################################
+d:
+        Schema(
+            title='name of the course',
+            description='the name of the course',
+            type=TYPE_STRING,
+            format='string',
+            enum=None,
+        ),
+
+
+##########################################################
+    '''
+    list
+    list all information about Equipment
+    '''
+    CourseArrangement_delete_request_body = Schema(
+        title=' delete course information ',  # 标题
+        description=
+        ' delete specific information about course information, if there has many id, it should be list as id_1, id_2,id_3....',  # 接口描述
+        type=
+        TYPE_OBJECT,  # 类型 "object" ,"string" ,"number" ,"integer" ,"boolean" ,"array" ,"file"
+        format=
+        None,  # 格式    date,date-time,password,binary,bytes,float,double,int32,int64,email,ipv4, ipv6, uri, uuid, slug, decimal
+        enum=None,  # [列表]列举参数的请求值
+        pattern=None,  # 当 format为 string是才填此项
+        # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
+        properties=delete_schema,
+        required=['numbers', 'id_1'],  # [必须的属性列表]
+        items=None,  # 当type是array时，填此项
+    )
+    CourseArrangement_delete_responses_success = Response(
+        description='CourseArrangement_delete_responses is success',
+        schema=responses_success,
+        examples={'message': '删除成功'})
+    CourseArrangement_delete_responses_fail = Response(
+        description='CourseArrangement_delete_responses is failure',
+        schema=responses_fail,
+        examples={'message': '删除失败，请重新尝试'})
+
+    @swagger_auto_schema(
+        request_body=CourseArrangement_delete_request_body,
+        manual_parameters=None,
+        operation_id=None,
+        operation_description='The api for delete course information',
+        operation_summary=None,
+        security=None,
+        responses={
+            204: CourseArrangement_delete_responses_success,
+            500: CourseArrangement_delete_responses_fail
+        },
+        tags=None)
+    @get_request_args
+    def delete(self, request,args,session):
+        is_login = request.COOKIES.get('is_login')
+        if not request.session.get(is_login, None):
+            return HttpResponse(dumps({'code': 0}),  content_type=content_type_tmp, charset='utf-8')
+        variable_name = locals()
+        numbers_id = args.get('numbers')
+        for i in range(1, numbers_id + 1):
+            variable_name['id_' + str(i)] = args.get('id_' + str(i))
+        try:
+            for i in range(1, numbers_id + 1):
+                models.TCycurricula.objects.filter(
+                    id=variable_name.get('id_' + str(i), 'id_1')).delete()
+            return HttpResponse(dumps({'message': '数据删除成功'}),
+                                status_code=404,
+                                content_type=content_type_tmp,
+                                charset='utf-8')
+        except Exception as error:
+            return HttpResponse(dumps(
+                {'message': data_base_error_specific + str(error)}),
+
+                                content_type=content_type_tmp,
+                                charset='utf-8')
+
+
+############################################################################
+'''
+    list
+    list all information about Equipment
+    '''
+    AttendanceInformation_delete_request_body = Schema(
+        title= ' delete attandance information ',  # 标题
+        description=None,  # 接口描述
+        type=TYPE_OBJECT,  # 类型 "object" ,"string" ,"number" ,"integer" ,"boolean" ,"array" ,"file"
+        format=None,  # 格式    date,date-time,password,binary,bytes,float,double,int32,int64,email,ipv4, ipv6, uri, uuid, slug, decimal
+        enum=None,  # [列表]列举参数的请求值
+        pattern=None,  # 当 format为 string是才填此项
+        # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
+        properties=delete_schema,
+        required=['numbers', 'id_1'],  # [必须的属性列表]
+        items=None,  # 当type是array时，填此项
+    )
+    AttendanceInformation_delete_responses_success = Response(
+        description='AttendanceInformation_delete_responses is success',
+        schema=responses_success,
+        examples={
+            'message': '删除成功'
+        }
+    )
+    AttendanceInformation_delete_responses_fail = Response(
+        description='AttendanceInformation_delete_responses is failure',
+        schema=responses_fail,
+        examples={
+            'message': '删除失败，请输入正确的id'
+        }
+    )
+
+    @swagger_auto_schema(
+        request_body=AttendanceInformation_delete_request_body,
+        manual_parameters=None,
+        operation_id=None,
+        operation_description='The api for login action',
+        operation_summary=None,
+        security=None,
+        responses={
+            204: AttendanceInformation_delete_responses_success,
+            500: AttendanceInformation_delete_responses_fail
+        },
+        tags=None)
+    @get_request_args
+    def delete(self, request,args,session):
+        is_login = request.COOKIES.get('is_login')
+        if not request.session.get(is_login, None):
+            return HttpResponse(dumps({'code': 0}),  content_type=content_type_tmp, charset='utf-8')
+        variable_name = locals()
+        numbers_id = args.get('numbers')
+        for i in range(1,numbers_id+1):
+            variable_name['id_'+str(i)] = args.get('id_'+str(i))
+        try:
+            for i in range(1,numbers_id+1):
+                models.TCyRunningaccount.objects.filter(id = variable_name.get('id_'+str(i),'id_1')).delete()
+            return HttpResponse(dumps({'message':'数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
+        except Exception as error:
+            return HttpResponse(dumps({'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
+################################################################################
+kind of id belonged to , 1 represents all kind of user, 2 represents to all kinds of equipment, 3 represents all kinds of course, 4 represents all kinds of record of attendance, 5 represents for department, 6 represents for location, 7 represents for all kinds of course arrangement, 8 represents for all kinds of media, 9 represents for all kinds of T_TypeRA
+#######################################################################
+    EquipmentInformation_put_data_schema = {
+        'id': Schema(
+            title='id of the equipment',
+            description=id_in_use,
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'name': Schema(
+            title='Name of the equipment',
+            description='Name of the equipment, suggest to be specific',
+            type=TYPE_STRING,
+            format='string',
+            enum=None,
+        ),
+        'id_location': Schema(
+            title=' the location of equipment',
+            description='to specific location',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'id_location_sn': Schema(
+            title='id of in the group location',
+            description=' id in group',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'id_ip': Schema(
+            title='ip location ',
+            description='ip location of equipment in internet',
+            type=TYPE_STRING,
+            format='string',
+            enum=None,
+        ),
+        'mac': Schema(
+            title='mac of equipmet',
+            description='mac of equipmet',
+            type=TYPE_STRING,
+            format='string',
+            enum=None,
+        ),
+        'state': Schema(
+            title=' status of equipment ',
+            description=' 0 represents for free, 1 represents for error, represents for others,3 represents for in use, 4 represents for open',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=[0, 1, 2, 3, 4],
+        ),
+        'login': Schema(
+            title='Login status',
+            description=' equipment is login or not, 0  represents  not login,1 represents login',
+            type=TYPE_STRING,
+            format='string',
+            enum=[0, 1],
+        ),
+        'link': Schema(
+            title=' internet status ',
+            description=' whether equipment has linked to internet, 0 represents offline, 1 represents online ',
+            type=TYPE_STRING,
+            format='string',
+            enum=[0, 1],
+        ),
+        'class_field': Schema(
+            title=' class of equipment ',
+            description=' 0 represents pc equipment, 1 represents 刷卡 equipment',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=[0, 1],
+        ),
+        'dx': Schema(
+            title=' specific location  of equipment ',
+            description=' specific location x of equipment ',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'dy': Schema(
+            title=' specific location  of equipment ',
+            description=' specific location y of equipment ',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'id_user': Schema(
+            title=' user ',
+            description=' user who is in use of equipment ',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'id_plan': Schema(
+            title=' the course ',
+            description=' the course equipment has been used  ',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'itimebegin': Schema(
+            title=no_idea,
+            description=no_idea,
+            type=TYPE_STRING,
+            format='int32',
+            enum=None,
+        ),
+        'itimelogin': Schema(
+            title=no_idea,
+            description=no_idea,
+            type=TYPE_STRING,
+            format='int32',
+            enum=None,
+        ),
+        'whitelist': Schema(
+            title=no_idea,
+            description=no_idea,
+            type=TYPE_STRING,
+            format='string',
+            enum=None,
+        ),
+        'rem': Schema(
+            title=' description ',
+            description='specific description of the equipment',
+            type=TYPE_STRING,
+            format='string',
+            enum=None,
+        ),
+        'timeupdate': Schema(
+            title=' update time ',
+            description=' the number of seconds since 2000-1-1 0:0:0 ',
+            type=TYPE_STRING,
+            format='int32',
+            enum=None,
+        ),
+        'idmanager': Schema(
+            title=' manager ',
+            description=' who has update the information of equipment ',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'portlisten': Schema(
+            title=' the port equipment ',
+            description=' the port equipment used to recieve data',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'type_field': Schema(
+            title=' type ',
+            description=' type of equipment ',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'timedelay': Schema(
+            title=' delay time for equipment ',
+            description=' the delay time for equipment to confirm, seconds measurement  ',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'keycance': Schema(
+            title=' cancel key ',
+            description=' the cancel key number on quipment to cancel',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'keyOk': Schema(
+            title=' ok key ',
+            description=' the cancel key number on quipment to confirm',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'keydel': Schema(
+            title=' delete key ',
+            description=' the cancel key number on quipment to delete',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'keyf1': Schema(
+            title=' function key ',
+            description=' the cancel key number on quipment on function',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'onall': Schema(
+            title=' whether door is open ',
+            description=' No idea of the  data to use',
+            type=TYPE_INTEGER,
+            format='int32',
+            enum=None,
+        ),
+        'rangeequs': Schema(
+            title=' location rangement ',
+            description=' the location of equipment rangement ',
+            type=TYPE_STRING,
+            format='string',
+            enum=None,
+        ),
+        'listplace': Schema(
+            title=' the location of equipment management ',
+            description=' the location of equipment management ',
+            type=TYPE_STRING,
+            format='string',
+            enum=None,
+        )
+    }
+    #########################################################################
+    StudentsInformation_put_data_schema = {
+        'id': Schema(
+            title='ID',
+            description='the id of user',
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
+        'nocard': Schema(
+            title='ID of card ',
+            description='the id of user card (student number)',
+            type=TYPE_STRING,
+            format='string',
+        ),
+        'nouser': Schema(
+            title='ID of user ',
+            description='the  student id of user',
+            type=TYPE_STRING,
+            format='string',
+        ),
+        'name': Schema(
+            title='name of user ',
+            description='name of user ',
+            type=TYPE_STRING,
+            format='string'
+        ),
+        'psw': Schema(
+            title=psw_word,
+            description=psw_word,
+            type=TYPE_STRING,
+            format='string'
+        ),
+        'deptid': Schema(
+            title='department  of user ',
+            description='department  of user',
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
+        'sex': Schema(
+            title='sex of user',
+            description='sex of user, 0 represents for female , 1 represents for male',
+            enum=[0, 1],
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
+        'attr': Schema(
+            title='permission level of student',
+            description='the id of user card (student number), 0 represents for SuperAdministration,1 represents for AcademicAdministration,2 represents for Counsellor,3 represents for Teacher,4  represents for  student',
+            enum=[0, 1, 2, 3, 4],
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
+        'timeupdate': Schema(
+            title='timeupdate',
+            description=time_update_database,
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
+        'localid': Schema(
+            title='id of manager room',
+            description=' the rooms which are under arranged by current user',
+            type=TYPE_STRING,
+            format='string'
+        ),
+        'tcyuserex__timeupdate': Schema(
+            title='timeupdate',
+            description=time_update_database,
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
+        'tcyuserex__idmanager': Schema(
+            title='id of manager',
+            description='when  last time of update information, the id manager who update the information ',
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
+        'tcyuserex__rem': Schema(
+            title='rem',
+            description='the description of the photo ',
+            type=TYPE_STRING,
+            format='string'
+        ),
+        'tcyuserex__photo': Schema(
+            title='photo',
+            description='the photo ',
+            type=TYPE_FILE,
+        ),
+    }
+##############################################################
+def data_attendance_format(data_equipment,data_equipment_back,data_personal,id_list):
+    for i in range(len(data_equipment)):
+        id_data = data_equipment[i]['id']
+        if id_data in id_list:
+            tmp_list=[]
+            for j in data_personal:
+                tmp_dict={}
+                if id_data == j['id']:
+                    tmp_dict['status'] = j['status']
+                    tmp_dict['idmanager__name'] = j['idmanager__name']
+                    tmp_dict['timeupdate'] = j['timeupdate']
+                    tmp_list.append(tmp_dict)
+            data_equipment[i]['person_data'] = tmp_list
+            data_equipment[i]['attendtotal'] = data_equipment_back[i]['attendtotal']
+        return data_equipment
+
+
+def data_attendance_class_format(data_equipment,data_equipment_back,data_personal,id_list):
+    for i in range(len(data_equipment)):
+        id_data = data_equipment[i]['time']
+        if id_data in id_list:
+            tmp_list = []
+            for j in data_personal:
+                tmp_dict = {}
+                if id_data == j['id']:
+                    tmp_dict['status'] = j['status']
+                    tmp_dict['idmanager__name'] = j['idmanager__name']
+                    tmp_dict['timeupdate'] = j['timeupdate']
+                    tmp_dict['id'] = j['id']
+                    tmp_dict['id_user__name'] = j['id_user__name']
+                    tmp_list.append(tmp_dict)
+            data_equipment[i]['person_data'] = tmp_list
+            data_equipment[i]['totalnumbers'] = data_equipment_back[i]['totalnumbers']
+        return data_equipment
+
+
+def data_students_attendance_format(data_equipment,data_equipment_back,data_personal,id_list):
+    for i in range(len(data_equipment)):
+        id_data = data_equipment[i]['id_plan']
+        if id_data in id_list:
+            tmp_list = []
+            for j in data_personal:
+                tmp_dict = {}
+                if id_data == j['id_plan']:
+                    tmp_dict['status'] = j['status']
+                    tmp_dict['idmanager__name'] = j['idmanager__name']
+                    tmp_dict['timeupdate'] = j['timeupdate']
+                    tmp_dict['id_user__name'] = j['id_user__name']
+                    tmp_list.append(tmp_dict)
+            data_equipment[i]['person_data'] = tmp_list
+            data_equipment[i]['attendtotal'] = data_equipment_back[i]['attemdtotal']
+        return data_equipment
+
+
+def data_attendance_class(course_plan_id,id_list,format_type,user_id):
+        data_equipment = list(
+            models.TCyRunningaccount.objects.filter(
+                id_plan=course_plan_id,
+                status__gt=0).annotate(attendnumbers=Count('id_user') ).values(
+                    'time', 'attendnumbers').order_by('time'))
+        data_equipment_back = list(
+            models.TCyRunningaccount.objects.filter(
+                id_plan=course_plan_id, ).annotate(
+                    totalnumbers=Count('id_user')).values(
+                        'time', 'totalnumbers').order_by('time'))
+        data_personal = list(
+            models.TCyRunningaccount.objects.filter(
+                id_plan=course_plan_id).values('id', 'id_user__name', 'status', 'time','idmanager__name','timeupdate').order_by('time'))
+        if id_list ==[]:
+            for j in data_equipment_back:
+                id_list.append(j['time'])
+        data_equipment = data_attendance_class_format(data_equipment,data_equipment_back,data_personal,id_list)
+        return data_equipment
+
+
+def data_attendance(course_plan_id,id_list,format_type,user_id):
+    '''
+    format_type is used to decide the type of the selection,1 represents for data attendance in personal format, 2 represents for data attendance in class format,3 represents for personal data
+    '''
+    if format_type == 3:
+        data_equipment = list(models.TCyRunningaccount.objects.filter(id_user=user_id,param2__id_curricula = course_plan_id).values('id', 'id_user__name', 'time','type_field','param2','param2__id_curricula__name','param2__timebegin','param2__timeend','timeupdate','idmanager__name').order_by('id'))
+        data_plan = list(models.TCyplan.objects.filter(id_curricula = course_plan_id).values('id','timebegin','timeend','timebegincheckbegin','timebegincheckend','timeendcheckend','timeendcheckbegin'))
+    else:
+        data_equipment = list(models.TCyRunningaccount.objects.filter(param2__id_curricula = course_plan_id).values('id', 'id_user__name', 'time','type_field','param2','param2__id_curricula__name','param2__timebegin','param2__timeend','timeupdate','idmanager__name').order_by('id'))
+        data_plan = list(models.TCyplan.objects.filter(id_curricula = course_plan_id).values('id','timebegin','timeend','timebegincheckbegin','timebegincheckend','timeendcheckend','timeendcheckbegin'))
+    if id_list ==[]:
+        for j in data_equipment:
+            id_list.append(j['id'])
+    if format_type == 1:
+        data_equipment = data_attendance_format(data_equipment,data_plan,id_list)
+    elif format_type == 2:
+        data_equipment = data_attendance_class_format(data_equipment,data_plan,id_list)
+    elif format_type ==3:
+        data_equipment = data_students_attendance_format(
+            data_equipment, data_plan, id_list)
+    return data_equipment

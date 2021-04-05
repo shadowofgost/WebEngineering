@@ -1,0 +1,84 @@
+{% load static %}
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>考勤管理系统  {% block title %} {% endblock %} </title>
+    <!-- Bootstrap core CSS -->
+<link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet" type="text/css">
+  </head>
+ <body onload="startClock()" onunload="stopClock()">
+<img src="/static/img/1.jpg" width="100%" height="100%" style="z-index:-100;position:absolute;left:0;top:0">
+<nav class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="http://10.20.7.53:85/polls/student/login">退出登录</a>
+    <div class="col-2 themed-grid-col" style="color:#ffffff">欢迎您，{{ personname }}同学</div>
+
+    <div id="show"></div>
+    <style>
+  #show{
+    color:#ffffff;
+  }
+  </style>
+<script>
+    var timer=null;
+    function displayClock(num){//num是传入的startClock中的动态值
+      if(num<10){
+        return "0"+num;
+      }
+      else{
+        return num;
+      }
+    }
+    //停止计时
+    function stopClock(){
+      clearTimeout(timer);
+    }
+    //开始计时
+    function startClock(){
+      var time =new Date();
+      var hours=displayClock(time.getHours())+":";
+      var minutes=displayClock(time.getMinutes())+":";
+      var seconds=displayClock(time.getSeconds());
+      //显示时间
+      show.innerHTML=hours+minutes+seconds;//在id为show的块区域显示
+      timer=setTimeout("startClock()",1000);//延时器
+    }
+  </script>
+
+
+</nav>
+
+<div class="container-fluid">
+
+  <div class="row">
+      {% include 'partials/_sidebar.html' %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+
+
+        {% block content %}
+
+
+
+
+
+        {% endblock %}
+    </main>
+  </div>
+</div>
+
+
+    <script  type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+      <script>window.jQuery || document.write('<script src="js/jquery.slim.min.js"><\/script>')</script>
+<script  type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+
+        <script  type="text/javascript" src="{% static 'js/feather.min.js' %}"></script>
+        <script  type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+  </body>
+
+</html>

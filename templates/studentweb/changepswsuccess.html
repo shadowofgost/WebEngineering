@@ -1,0 +1,18 @@
+ <p style="width:100%;text=align:center;color:green">
+                修改成功！
+                 <script type="text/javascript">
+function countDown(secs,surl){
+ //alert(surl);
+ var jumpTo = document.getElementById('jumpTo');
+ jumpTo.innerHTML=secs;
+ if(--secs>0){
+     setTimeout("countDown("+secs+",'"+surl+"')",1000);
+     }
+ else{
+     location.href=surl;
+     }
+ }
+</script>
+                <span id="jumpTo">5</span>秒后自动跳转到登陆界面
+                <script type="text/javascript">countDown(5,'http://10.20.7.53:85/polls/student/login');</script>
+            </p>

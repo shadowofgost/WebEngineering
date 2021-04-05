@@ -1,0 +1,75 @@
+{
+	// 使用 IntelliSense 了解相关属性。
+	// 悬停以查看现有属性的描述。
+	// 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": " Django-PLUS",
+			"type": "python",
+			"request": "launch",
+			"program": "${workspaceFolder}\\manage.py",
+			"args": ["runserver_plus"],
+			"django": true
+		},
+		{
+			"name": "Pyramid ",
+			"type": "python",
+			"request": "launch",
+			"module": "pyramid.scripts.pserve",
+			"args": ["${workspaceFolder}\\development.ini"],
+			"pyramid": true,
+			"jinja": true
+		},
+		{
+			"name": "FastAPI",
+			"type": "python",
+			"request": "launch",
+			"module": "uvicorn",
+			"args": ["main:app"],
+			"jinja": true
+		},
+		{
+			"name": "Django",
+			"type": "python",
+			"request": "launch",
+			"program": "${workspaceFolder}\\manage.py",
+			"args": ["runserver"],
+			"django": true
+		},
+		{
+			"name": "Python: PID",
+			"type": "python",
+			"request": "attach",
+			"processId": "${command:pickProcess}"
+		},
+		{
+			"name": "Python: 模块",
+			"type": "python",
+			"request": "launch",
+			"module": "请输入模块名称"
+		},
+		{
+			"name": "Python",
+			"type": "python",
+			"request": "launch",
+			"program": "${file}",
+			"console": "integratedTerminal"
+		},
+		{
+			"name": "Python: 远程连接",
+			"type": "python",
+			"request": "attach",
+			"connect": {
+				"host": "localhost",
+				"port": 5678
+			},
+			"pathMappings": [
+				{
+					"localRoot": "${workspaceFolder}",
+					"remoteRoot": "."
+				}
+			]
+		}
+	]
+}
