@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg.openapi import Schema, Response, TYPE_FILE, TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING
+from drf_yasg.openapi import Parameter, Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from .. import models
 from json import dumps
 from copy import deepcopy
@@ -108,6 +108,24 @@ class StudentsInformation(APIView):
         description='这个接口用于展示成功获取全部数据的格式',
         type=TYPE_OBJECT,
         properties={
+            'page': Schema(
+                title='页码',
+                description='用于表示展示的页码数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'limits': Schema(
+                title='页码',
+                description='用于表示每页展示的行数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'error_code': Schema(
+                title='是否有报错数据',
+                description='用于传达是否有报错数据',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
             'data': Schema(
                 title='数据',
                 description='用于传递查询到的全部数据',
@@ -124,11 +142,30 @@ class StudentsInformation(APIView):
     StudentsInformation_get_responses_fail = Response(
         description='学生个人信息查询失败的响应',
         schema=responses_fail,
-        examples={'message': patch_error})
+        examples={
+            'error_code': 1,
+            'message': patch_error})
+    page_get_parammeter = Parameter(
+        name='page',
+        in_=IN_QUERY,
+        description='查询时设定的页码数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
+    )
+    limits_get_parammeter = Parameter(
+        name='limits',
+        in_=IN_QUERY,
+        description='查询时设定的每页行数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
+    )
 
     @swagger_auto_schema(
         request_body=None,
-        manual_parameters=None,
+        manual_parameters=[
+            page_get_parammeter, limits_get_parammeter],
         operation_id=None,
         operation_description='所有学生信息查询',
         operation_summary=None,
@@ -162,7 +199,7 @@ class StudentsInformation(APIView):
         pattern=None,  # 当 format为 string是才填此项
         # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
         properties=post_search,
-        required=['input_string'],  # [必须的属性列表]
+        required=['input_string', 'page', 'limits'],  # [必须的属性列表]
         items=None,  # 当type是array时，填此项
     )
     StudentsInformation_post_responses_success = Response(
@@ -174,6 +211,7 @@ class StudentsInformation(APIView):
         description='查询所有学生个人信息失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': post_error
         }
     )
@@ -199,8 +237,7 @@ class StudentsInformation(APIView):
         pages = args.get('page', 1)
         limits = args.get('limits', 20)
         if input_string == None:
-            data_user_information = models.TCyuser.objects.filter(attr=4).values('id', 'nocard', 'nouser', 'name', 'psw', 'deptid__name', 'sex', 'attr', 'timeupdate',
-                                                                                 'userex_related_to_user_information__rem', 'localid', 'userex_related_to_user_information__timeupdate', 'userex_related_to_user_information__idmanager__name')
+            data_user_information = models.TCyuser.objects.filter(attr=4).values('id', 'nocard', 'nouser', 'name', 'psw', 'deptid__name', 'sex', 'attr', 'timeupdate','userex_related_to_user_information__rem', 'localid', 'userex_related_to_user_information__timeupdate', 'userex_related_to_user_information__idmanager__name')
             return data_total_response(data_user_information, pages, limits)
         else:
             input_string = input_string.strip()
@@ -249,6 +286,7 @@ class StudentsInformation(APIView):
         description='增加个人信息成功的响应',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': put_success
         }
     )
@@ -256,6 +294,7 @@ class StudentsInformation(APIView):
         description='增加个人信息失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': put_error
         }
     )
@@ -293,7 +332,7 @@ class StudentsInformation(APIView):
             variable_name['deptid'] = variable_name['deptid__name']
         else:
             return HttpResponse(dumps(
-                {'message': '请确保所填的id类数据是数字'}),         content_type=content_type_tmp, charset='utf-8')
+                {'error_code': 1, 'message': '请确保所填的id类数据是数字'}),         content_type=content_type_tmp, charset='utf-8')
 
         try:
             print(2)
@@ -325,9 +364,9 @@ class StudentsInformation(APIView):
                 timeupdate=variable_name.get('timeupdate'),
                 idmanager=idmanager_object
             )
-            return HttpResponse(dumps({'message': put_success}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': put_success}), content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
     '''
     list
     list all information about Equipment
@@ -348,6 +387,7 @@ class StudentsInformation(APIView):
         description=' 修改个人信息成功的响应',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': patch_success
         }
     )
@@ -355,6 +395,7 @@ class StudentsInformation(APIView):
         description=' 修改个人信息失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': patch_error
         }
     )
@@ -382,7 +423,7 @@ class StudentsInformation(APIView):
             'localid', 'userex_related_to_user_information__timeupdate', 'userex_related_to_user_information__idmanager', 'idmanager'
         ))
         if data_user_information_initial == []:
-            return HttpResponse(dumps({'message': id_error}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': id_error}),  content_type=content_type_tmp, charset='utf-8')
         data_user_information = data_user_information_initial[0]
         field_name = ['id', 'nocard', 'nouser', 'name', 'psw', 'deptid__name', 'sex', 'attr', 'timeupdate', 'userex_related_to_user_information__rem',
                       'localid', 'idmanager__name', 'userex_related_to_user_information__timeupdate', 'userex_related_to_user_information__idmanager__name']
@@ -396,7 +437,7 @@ class StudentsInformation(APIView):
             args['userex_related_to_user_information__idmanager'] = args['userex_related_to_user_information__idmanager__name']
         else:
             return HttpResponse(dumps(
-                {'message': '请确保所填的id类数据是数字'}),
+                {'error_code': 1, 'message': '请确保所填的id类数据是数字'}),
 
                 content_type=content_type_tmp,
                 charset='utf-8')
@@ -450,9 +491,9 @@ class StudentsInformation(APIView):
                         timeupdate=variable_name.get('timeupdate'),
                         idmanager=idmanager_object
                     )
-                    return HttpResponse(dumps({'message': put_success}), content_type=content_type_tmp, charset='utf-8')
+                    return HttpResponse(dumps({'error_code': 0, 'message': put_success}), content_type=content_type_tmp, charset='utf-8')
                 except Exception as error:
-                    return HttpResponse(dumps({'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
+                    return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
             use_tmp_1 = models.TCyuserex.objects.filter(id=variable_name["id"]).update(
                 rem=variable_name.get(
                     'userex_related_to_user_information__rem'),
@@ -460,9 +501,9 @@ class StudentsInformation(APIView):
                     'userex_related_to_user_information__timeupdate'),
                 idmanager=variable_name.get('idmanager')
             )
-            return HttpResponse(dumps({'message': '修改学生信息成功'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': '修改学生信息成功'}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
     APIView_delete_request_body = Schema(
         title=' 删除数据库中的信息 ',  # 标题
         description='删除数据库中具体的id名称',  # 接口描述
@@ -479,6 +520,7 @@ class StudentsInformation(APIView):
         description='APIView_delete_responses is success',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': '删除成功'
         }
     )
@@ -486,6 +528,7 @@ class StudentsInformation(APIView):
         description='APIView_delete_responses is failure',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': '删除失败，请输入正确的id'
         }
     )
@@ -519,6 +562,6 @@ class StudentsInformation(APIView):
                     id=variable_name.get('id_'+str(i), 'id_1')).delete()
                 models.TCyuser.objects.filter(
                     id=variable_name.get('id_'+str(i), 'id_1')).delete()
-                return HttpResponse(dumps({'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
+                return HttpResponse(dumps({'error_code': 0, 'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific + str(error)}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific + str(error)}), content_type=content_type_tmp, charset='utf-8')

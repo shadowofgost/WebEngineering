@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg.openapi import Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING
+from drf_yasg.openapi import Parameter, Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from json import dumps
 from .. import models
 from .Public import responses_success, responses_fail, get_request_args, data_total_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_success, patch_error, id_error, delete_schema
@@ -227,6 +227,24 @@ class CourseInformation(APIView):
         description='这个接口用于展示成功获取全部数据的格式',
         type=TYPE_OBJECT,
         properties={
+            'page': Schema(
+                title='页码',
+                description='用于表示展示的页码数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'limits': Schema(
+                title='页码',
+                description='用于表示每页展示的行数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'error_code': Schema(
+                title='是否有报错数据',
+                description='用于传达是否有报错数据',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
             'data': Schema(
                 title='数据',
                 description='用于传递查询到的全部数据',
@@ -244,13 +262,31 @@ class CourseInformation(APIView):
         description='查询课程信息失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': '查询课程信息失败'
         }
+    )
+    page_get_parammeter = Parameter(
+        name='page',
+        in_=IN_QUERY,
+        description='查询时设定的页码数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
+    )
+    limits_get_parammeter = Parameter(
+        name='limits',
+        in_=IN_QUERY,
+        description='查询时设定的每页行数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
     )
 
     @swagger_auto_schema(
         request_body=None,
-        manual_parameters=None,
+        manual_parameters=[
+            page_get_parammeter, limits_get_parammeter],
         operation_id=None,
         operation_description='这个端口用于查询课程信息',
         operation_summary=None,
@@ -270,6 +306,8 @@ class CourseInformation(APIView):
         user_group_id = request.session.get(user_group_id)
         user_id = request.COOKIES.get('user_id')
         user_id = request.session.get(user_id)
+        user_nouser = request.COOKIES.get('user_nouser')
+        user_nouser = request.session.get(user_nouser)
         data_equipment = []
         if user_group_id == 3:
             data_equipment = models.TCycurricula.objects.filter(id_speaker=user_id).values(
@@ -289,6 +327,18 @@ class CourseInformation(APIView):
                 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces',
                 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
             )
+        elif user_group_id == 4:
+            data_equipment = models.TCycurricula.objects.filter(Q(rangeusers__icontains=user_nouser)).values(
+                'id', 'name', 'timebegin', 'timeend', 'id_location__name',
+                'id_speaker__name', 'attr', 'charge', 'pwaccess',
+                'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin',
+                'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend',
+                'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces',
+                'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
+            )
+            #data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user = user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem')
+            # if data_equipment == []:
+            # return HttpResponse(dumps({'error_code': 1, 'message': '没有选课或者还未开始上课'}),content_type=content_type_tmp,charset='utf-8')
         if data_equipment == []:
             data_equipment = models.TCycurricula.objects.all().values(
                 'id', 'name', 'timebegin', 'timeend', 'id_location__name',
@@ -312,13 +362,14 @@ class CourseInformation(APIView):
         pattern=None,  # 当 format为 string是才填此项
         # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
         properties=post_search,
-        required=['input_string'],  # [必须的属性列表]
+        required=['input_string', 'page', 'limits'],  # [必须的属性列表]
         items=None,  # 当type是array时，填此项
     )
     CourseInformation_post_responses_success = Response(
         description='查询课程信息成功的响应',
         schema=get_responses_success,
         examples={
+            'error_code': 0,
             'message': '查询成功'
         }
     )
@@ -326,6 +377,7 @@ class CourseInformation(APIView):
         description='查询课程信息失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': post_error
         }
     )
@@ -354,6 +406,8 @@ class CourseInformation(APIView):
         user_group_id = request.session.get(user_group_id)
         user_id = request.COOKIES.get('user_id')
         user_id = request.session.get(user_id)
+        user_nouser = request.COOKIES.get('user_nouser')
+        user_nouser = request.session.get(user_nouser)
         data_equipment = []
         if input_string == None:
             if user_group_id == 3:
@@ -374,6 +428,18 @@ class CourseInformation(APIView):
                     'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces',
                     'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
                 )
+            elif user_group_id == 4:
+                data_equipment = models.TCycurricula.objects.filter(Q(rangeusers__icontains=user_nouser)).values(
+                    'id', 'name', 'timebegin', 'timeend', 'id_location__name',
+                    'id_speaker__name', 'attr', 'charge', 'pwaccess',
+                    'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin',
+                    'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend',
+                    'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces',
+                    'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
+                )
+                #data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user = user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem')
+                # if data_equipment == []:
+                # return HttpResponse(dumps({'error_code': 1, 'message': '没有选课或者还未开始上课'}),content_type=content_type_tmp,charset='utf-8')
             if data_equipment == []:
                 data_equipment = models.TCycurricula.objects.all().values(
                     'id', 'name', 'timebegin', 'timeend', 'id_location__name',
@@ -561,6 +627,18 @@ class CourseInformation(APIView):
                             'aboutspeaker',
                             'rem'
                     ).distinct()
+            elif user_group_id == 4:
+                if isinstance(test_input, int):
+                    data_equipment = models.TCycurricula.objects.filter(Q(id=test_input) | Q(timebegin=test_input) | Q(timeend=test_input) | Q(id_location=test_input) | Q(id_speaker=test_input) | Q(attr=test_input) | Q(charge=test_input) | Q(pwaccess=test_input) | Q(pwcontinuous=test_input) | Q(pwdirection=test_input) | Q(dooropen=test_input) | Q(timebegincheckbegin=test_input) | Q(timebegincheckend=test_input) | Q(timeendcheckbegin=test_input) | Q(timeendcheckend=test_input) | Q(
+                        timeupdate=test_input) | Q(idmanager=test_input), Q(rangeusers__icontains=user_nouser)).values('id', 'name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct()
+                else:
+                    data_equipment = models.TCycurricula.objects.filter(Q(name__icontains=input_string) | Q(id_location__name__icontains=input_string) | Q(id_speaker__name__icontains=input_string) | Q(idmanager__name__icontains=input_string) | Q(rem__icontains=input_string) | Q(rangeequs__icontains=input_string) | Q(rangeusers__icontains=input_string) | Q(listdepts__icontains=input_string) | Q(listplaces__icontains=input_string) | Q(mapuser2equ__icontains=input_string) | Q(aboutspeaker__icontains=input_string) | Q(
+                        idmanager__name__icontains=input_string), Q(rangeusers__icontains=user_nouser)).values('id', 'name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct()
+            # elif user_group_id == 4:
+                # if isinstance(test_input, int):
+                    #data_equipment = models.TCycurricula.objects.filter(Q(id=test_input)| Q(timebegin=test_input)| Q(timeend=test_input)| Q(id_location=test_input)| Q(id_speaker=test_input)| Q(attr=test_input)| Q(charge=test_input)| Q(pwaccess=test_input)| Q(pwcontinuous=test_input)| Q(pwdirection=test_input)| Q(dooropen=test_input)| Q(timebegincheckbegin=test_input)| Q(timebegincheckend=test_input)| Q(timeendcheckbegin=test_input)| Q(timeendcheckend=test_input)| Q(timeupdate=test_input)| Q(idmanager=test_input),id_curricula__runningaccount_related_to_plan__id_user = user_id).values('id','name','timebegin','timeend','id_location__name','id_speaker__name','attr','charge','pwaccess','pwcontinuous','pwdirection','dooropen','timebegincheckbegin','timebegincheckend','timeendcheckbegin','timeendcheckend','rangeusers','listdepts','rangeequs','timeupdate','listplaces','idmanager__name','mapuser2equ','aboutspeaker','rem').distinct()
+                # else:
+                    #data_equipment = models.TCycurricula.objects.filter(Q(name__icontains=input_string)| Q(id_location__name__icontains=input_string)| Q(id_speaker__name__icontains=input_string)| Q(idmanager__name__icontains=input_string)| Q(rem__icontains=input_string)| Q(rangeequs__icontains=input_string)| Q(rangeusers__icontains=input_string)| Q(listdepts__icontains=input_string)| Q(listplaces__icontains=input_string)| Q(mapuser2equ__icontains=input_string)| Q(aboutspeaker__icontains=input_string)| Q(idmanager__name__icontains=input_string),id_curricula__runningaccount_related_to_plan__id_user = user_id).values('id','name','timebegin','timeend','id_location__name','id_speaker__name','attr','charge','pwaccess','pwcontinuous','pwdirection','dooropen','timebegincheckbegin','timebegincheckend','timeendcheckbegin','timeendcheckend','rangeusers','listdepts','rangeequs','timeupdate','listplaces','idmanager__name','mapuser2equ','aboutspeaker','rem').distinct()
             if data_equipment == []:
                 if isinstance(test_input, int):
                     data_equipment = models.TCycurricula.objects.filter(
@@ -679,6 +757,7 @@ class CourseInformation(APIView):
         description='添加课程信息成功的响应',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': put_success
         }
     )
@@ -686,6 +765,7 @@ class CourseInformation(APIView):
         description='添加课程信息失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': put_error
         }
     )
@@ -745,8 +825,7 @@ class CourseInformation(APIView):
             variable_name['id_speaker'] = variable_name['id_speaker__name']
         else:
             return HttpResponse(dumps(
-                {'message': '请确保所填的id类数据是数字'}),
-
+                {'error_code': 1, 'message': '请确保所填的id类数据是数字'}),
                 content_type=content_type_tmp,
                 charset='utf-8')
         # 批量命名变量
@@ -783,9 +862,9 @@ class CourseInformation(APIView):
                 mapuser2equ=variable_name.get('mapuser2equ'),
                 aboutspeaker=variable_name.get('aboutspeaker'),
                 rem=variable_name.get('rem'))
-            return HttpResponse(dumps({'message': put_success}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': put_success}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
     '''
     list
     list all information about Equipment
@@ -806,6 +885,7 @@ class CourseInformation(APIView):
         description='修改课程信息成功的响应',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': patch_success
         }
     )
@@ -813,6 +893,7 @@ class CourseInformation(APIView):
         description='修改课程信息失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': patch_error
         }
     )
@@ -837,7 +918,7 @@ class CourseInformation(APIView):
         data_equipment_initial = list(
             models.TCycurricula.objects.filter(id=id_equipment).values('id', 'name', 'timebegin', 'timeend', 'id_location', 'id_speaker', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager', 'mapuser2equ', 'aboutspeaker', 'rem'))
         if data_equipment_initial == []:
-            return HttpResponse(dumps({'message': id_error}),
+            return HttpResponse(dumps({'error_code': 1, 'message': id_error}),
 
                                 content_type=content_type_tmp,
                                 charset='utf-8')
@@ -879,7 +960,7 @@ class CourseInformation(APIView):
             args['idmanager'] = args['idmanager__name']
         else:
             return HttpResponse(dumps(
-                {'message': '请确保所填的id类数据是数字'}),
+                {'error_code': 1, 'message': '请确保所填的id类数据是数字'}),
 
                 content_type=content_type_tmp,
                 charset='utf-8')
@@ -919,11 +1000,10 @@ class CourseInformation(APIView):
                 mapuser2equ=variable_name.get('mapuser2equ'),
                 aboutspeaker=variable_name.get('aboutspeaker'),
                 rem=variable_name.get('rem'))
-            return HttpResponse(dumps({'message': '修改课程表成功'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': '修改课程表成功'}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
             return HttpResponse(dumps(
-                {'message': data_base_error_specific + str(error)}),
-
+                {'error_code': 1, 'message': data_base_error_specific + str(error)}),
                 content_type=content_type_tmp,
                 charset='utf-8')
     APIView_delete_request_body = Schema(
@@ -942,6 +1022,7 @@ class CourseInformation(APIView):
         description='APIView_delete_responses is success',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': '删除成功'
         }
     )
@@ -949,6 +1030,7 @@ class CourseInformation(APIView):
         description='APIView_delete_responses is failure',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': '删除失败，请输入正确的id'
         }
     )
@@ -979,6 +1061,6 @@ class CourseInformation(APIView):
             for i in range(numbers_id):
                 models.TCycurricula.objects.filter(
                     id=variable_name.get('id_'+str(i), 'id_1')).delete()
-                return HttpResponse(dumps({'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
+                return HttpResponse(dumps({'error_code': 0, 'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific + str(error)}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific + str(error)}), content_type=content_type_tmp, charset='utf-8')

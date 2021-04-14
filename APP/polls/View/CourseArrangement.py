@@ -2,13 +2,14 @@
 from django.http import HttpResponse
 from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg.openapi import Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING
+from drf_yasg.openapi import Parameter, Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from json import dumps
 from .. import models
 from copy import deepcopy
 from .APIViewDelete import APIViewDelete
-from .Public import responses_success, responses_fail, get_request_args, data_total_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_success, patch_error, id_error,delete_schema
+from .Public import responses_success, responses_fail, get_request_args, data_total_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_success, patch_error, id_error, delete_schema
 from rest_framework.views import APIView
+
 
 class CourseArrangement(APIView):
     '''
@@ -229,6 +230,24 @@ class CourseArrangement(APIView):
         description='这个接口用于展示成功获取全部数据的格式',
         type=TYPE_OBJECT,
         properties={
+            'page': Schema(
+                title='页码',
+                description='用于表示展示的页码数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'limits': Schema(
+                title='页码',
+                description='用于表示每页展示的行数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'error_code': Schema(
+                title='是否有报错数据',
+                description='用于传达是否有报错数据',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
             'data': Schema(
                 title='数据',
                 description='用于传递查询到的全部数据',
@@ -246,13 +265,31 @@ class CourseArrangement(APIView):
         description='查询课程信息失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': '查询课程信息失败'
         }
+    )
+    page_get_parammeter = Parameter(
+        name='page',
+        in_=IN_QUERY,
+        description='查询时设定的页码数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
+    )
+    limits_get_parammeter = Parameter(
+        name='limits',
+        in_=IN_QUERY,
+        description='查询时设定的每页行数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
     )
 
     @swagger_auto_schema(
         request_body=None,
-        manual_parameters=None,
+        manual_parameters=[
+            page_get_parammeter, limits_get_parammeter],
         operation_id=None,
         operation_description='这个端口用于查询课程信息',
         operation_summary=None,
@@ -269,13 +306,7 @@ class CourseArrangement(APIView):
         pages = args.get('page', 1)
         limits = args.get('limits', 20)
         data_equipment = models.TCyplan.objects.all().values('id',
-        'id_curricula__name', 'timebegin', 'timeend', 'id_location__name',
-         'id_speaker__name', 'attr', 'charge', 'pwaccess',
-        'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin',
-        'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend',
-        'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces',
-        'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
-                                                             )
+                                                             'id_curricula__name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem')
         return data_total_response(data_equipment, pages, limits)
     '''
     list
@@ -290,17 +321,23 @@ class CourseArrangement(APIView):
         pattern=None,  # 当 format为 string是才填此项
         # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
         properties=post_search,
-        required=['input_string'],  # [必须的属性列表]
+        required=['input_string', 'page', 'limits'],  # [必须的属性列表]
         items=None,  # 当type是array时，填此项
     )
     CourseArrangement_post_responses_success = Response(
         description='查询课程安排表成功的响应',
         schema=get_responses_success,
-        examples={'message': '查询成功'})
+        examples={
+            'error_code': 0,
+            'message': '查询成功'
+        })
     CourseArrangement_post_responses_fail = Response(
         description='查询课程安排表失败的响应',
         schema=responses_fail,
-        examples={'message': post_error})
+        examples={
+            'error_code': 1,
+            'message': post_error
+        })
 
     @swagger_auto_schema(
         request_body=CourseArrangement_post_request_body,
@@ -354,7 +391,7 @@ class CourseArrangement(APIView):
             input_string = input_string.strip()
             try:
                 test_input = eval(input_string)
-            except :
+            except:
                 test_input = input_string
             if isinstance(test_input, int):
                 data_equipment = models.TCyplan.objects.filter(
@@ -412,8 +449,8 @@ class CourseArrangement(APIView):
                     | Q(mapuser2equ__icontains=input_string)
                     | Q(aboutspeaker__icontains=input_string)
                     | Q(idmanager__name__icontains=input_string)
-                    |Q(id_location__name__icontains=input_string)
-                    |Q(id_speaker__name__icontains=input_string)).values(
+                    | Q(id_location__name__icontains=input_string)
+                    | Q(id_speaker__name__icontains=input_string)).values(
                         'id',
                         'id_curricula',
                         'timebegin',
@@ -462,11 +499,17 @@ class CourseArrangement(APIView):
     CourseArrangement_put_responses_success = Response(
         description='增加课程安排表数据成功的响应',
         schema=responses_success,
-        examples={'message': put_success})
+        examples={
+            'error_code': 0,
+            'message': put_success
+        })
     CourseArrangement_put_responses_fail = Response(
         description='增加课程安排表数据失败的响应',
         schema=responses_fail,
-        examples={'message': put_error})
+        examples={
+            'error_code': 1,
+            'message': put_error
+        })
 
     @swagger_auto_schema(
         request_body=CourseArrangement_put_request_body,
@@ -482,9 +525,6 @@ class CourseArrangement(APIView):
         tags=None)
     @get_request_args
     def put(self, request, args, session):
-        is_login = request.COOKIES.get('is_login')
-        if not request.session.get(is_login, None):
-            return HttpResponse(dumps({'code': 0}),  content_type=content_type_tmp, charset='utf-8')
         field_name = [
             'id', 'id_curricula__name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'timeupdate',
             'idmanager__name',  'aboutspeaker', 'rem'
@@ -499,14 +539,13 @@ class CourseArrangement(APIView):
         user_id = request.session.get(user_id)
         variable_name['idmanager'] = user_id
         del variable_name['idmanager__name']
-        if isinstance(variable_name['id_location__name'],int) and isinstance(variable_name['id_speaker__name'],int) and isinstance(variable_name['id_curricula__name'],int):
+        if isinstance(variable_name['id_location__name'], int) and isinstance(variable_name['id_speaker__name'], int) and isinstance(variable_name['id_curricula__name'], int):
             variable_name['id_location'] = variable_name['id_location__name']
             variable_name['id_speaker'] = variable_name['id_speaker__name']
             variable_name['id_curricula'] = variable_name['id_curricula__name']
         else:
             return HttpResponse(dumps(
-                {'message': '请确保所填的id类数据是数字'}),
-
+                {'error_code': 1, 'message': '请确保所填的id类数据是数字'}),
                 content_type=content_type_tmp,
                 charset='utf-8')
         # 批量命名变量
@@ -545,14 +584,12 @@ class CourseArrangement(APIView):
                 mapuser2equ=variable_name.get('mapuser2equ'),
                 aboutspeaker=variable_name.get('aboutspeaker'),
                 rem=variable_name.get('rem'))
-            return HttpResponse(dumps({'message': put_success}),
-
+            return HttpResponse(dumps({'error_code': 0, 'message': put_success}),
                                 content_type=content_type_tmp,
                                 charset='utf-8')
         except Exception as error:
             return HttpResponse(dumps(
-                {'message': data_base_error_specific + str(error)}),
-
+                {'error_code': 1, 'message': data_base_error_specific + str(error)}),
                 content_type=content_type_tmp,
                 charset='utf-8')
 
@@ -575,11 +612,17 @@ class CourseArrangement(APIView):
     CourseArrangement_patch_responses_success = Response(
         description='修改课程安排表成功的响应',
         schema=responses_success,
-        examples={'message': patch_success})
+        examples={
+            'error_code': 0,
+            'message': patch_success
+        })
     CourseArrangement_patch_responses_fail = Response(
         description='修改课程安排表失败的响应',
         schema=responses_fail,
-        examples={'message': patch_error})
+        examples={
+            'error_code': 1,
+            'message': patch_error
+        })
 
     @swagger_auto_schema(request_body=CourseArrangement_patch_request_body,
                          manual_parameters=None,
@@ -626,7 +669,7 @@ class CourseArrangement(APIView):
                 'aboutspeaker',
                 'rem'))
         if data_equipment_initial == []:
-            return HttpResponse(dumps({'message': id_error}),
+            return HttpResponse(dumps({'error_code': 1, 'message': id_error}),
 
                                 content_type=content_type_tmp,
                                 charset='utf-8')
@@ -647,14 +690,14 @@ class CourseArrangement(APIView):
             'id_speaker__name', data_equipment['id_speaker'])
         args['idmanager'] = args.get(
             'idmanager__name', data_equipment['idmanager'])
-        if isinstance(args['id_location__name'], int) and isinstance(args['id_speaker__name'], int) and isinstance(args['id_curricula__name'], int) and isinstance(args['idmanager__name'],int):
+        if isinstance(args['id_location__name'], int) and isinstance(args['id_speaker__name'], int) and isinstance(args['id_curricula__name'], int) and isinstance(args['idmanager__name'], int):
             args['id_location'] = args['id_location__name']
             args['id_speaker'] = args['id_speaker__name']
             args['id_curricula'] = args['id_curricula__name']
             args['idmanager'] = args['idmanager__name']
         else:
             return HttpResponse(dumps(
-                {'message': '请确保所填的id类数据是数字'}),
+                {'error_code': 1, 'message': '请确保所填的id类数据是数字'}),
 
                 content_type=content_type_tmp,
                 charset='utf-8')
@@ -697,7 +740,7 @@ class CourseArrangement(APIView):
             return HttpResponse(dumps({'message': '修改课程安排表成功'}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
             return HttpResponse(dumps(
-                {'message': data_base_error_specific + str(error)}),
+                {'error_code': 1, 'message': data_base_error_specific + str(error)}),
 
                 content_type=content_type_tmp,
                 charset='utf-8')
@@ -717,6 +760,7 @@ class CourseArrangement(APIView):
         description='APIView_delete_responses is success',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': '删除成功'
         }
     )
@@ -724,6 +768,7 @@ class CourseArrangement(APIView):
         description='APIView_delete_responses is failure',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': '删除失败，请输入正确的id'
         }
     )
@@ -754,6 +799,6 @@ class CourseArrangement(APIView):
             for i in range(numbers_id):
                 models.TCyplan.objects.filter(
                     id=variable_name.get('id_'+str(i), 'id_1')).delete()
-                return HttpResponse(dumps({'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
+                return HttpResponse(dumps({'error_code': 0, 'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific + str(error)}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific + str(error)}), content_type=content_type_tmp, charset='utf-8')

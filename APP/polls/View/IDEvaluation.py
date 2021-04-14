@@ -42,6 +42,7 @@ class IDEvaluation(APIView):
         description='post请求成功的时候',
         schema=responses_success,
         examples={
+            'error_code':0,
             'message': post_success
         }
     )
@@ -49,6 +50,7 @@ class IDEvaluation(APIView):
         description='post请求失败的时候',
         schema=responses_fail,
         examples={
+            'error_code':1,
             'message': post_error
         }
     )
@@ -72,7 +74,7 @@ class IDEvaluation(APIView):
         kind_evaluation = args.get('kind', None)
         data = []
         if not(id_evaluation or kind_evaluation):
-            return HttpResponse(dumps({'message': '请勿空提交'}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1,'message': '请勿空提交'}), content_type=content_type_tmp, charset='utf-8')
         if kind_evaluation == 1:
             data = list(models.TCyuser.objects.filter(
                 id=id_evaluation).values())
@@ -101,6 +103,6 @@ class IDEvaluation(APIView):
             data = list(models.TCytypera.objects.filter(
                 id=id_evaluation).values())
         if data == []:
-            return HttpResponse(dumps({'message': 'id不存在'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': 'id不存在'}),  content_type=content_type_tmp, charset='utf-8')
         else:
-            return HttpResponse(dumps({'message': 'id存在'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0,'message': 'id存在'}),  content_type=content_type_tmp, charset='utf-8')

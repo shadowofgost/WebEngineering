@@ -13,8 +13,9 @@ from django.core.paginator import Paginator, EmptyPage
 from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
 from copy import deepcopy
-from .Public import responses_fail,data_attendance,get_request_args,post_search, content_type_tmp,data_total_response,post_error
+from .Public import responses_fail, data_attendance, get_request_args, post_search, content_type_tmp, data_total_response, post_error
 from rest_framework.views import APIView
+
 
 class StudentAttendance(APIView):
     '''
@@ -98,12 +99,30 @@ class StudentAttendance(APIView):
         description='这个接口用于展示成功获取全部数据的格式',
         type=TYPE_OBJECT,
         properties={
+            'page': Schema(
+                title='页码',
+                description='用于表示展示的页码数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'limits': Schema(
+                title='页码',
+                description='用于表示每页展示的行数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'error_code': Schema(
+                title='是否有报错数据',
+                description='用于传达是否有报错数据',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
             'data': Schema(
-                        title='数据',
-                        description='用于传递查询到的全部数据',
-                        type=TYPE_OBJECT,
-                        properties=[data_schema_present, data_schema_present]
-                    ),
+                title='数据',
+                description='用于传递查询到的全部数据',
+                type=TYPE_OBJECT,
+                properties=[data_schema_present, data_schema_present]
+            ),
         }
     )
     StudentInformation_get_parammeter = Parameter(
@@ -118,6 +137,7 @@ class StudentAttendance(APIView):
         description='学生获取考勤数据成功的响应',
         schema=get_responses_success,
         examples={
+            'error_code': 0,
             'message': '获取成功'
         }
     )
@@ -125,13 +145,31 @@ class StudentAttendance(APIView):
         description='学生获取考勤数据失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': '获取成功'
         }
+    )
+    page_get_parammeter = Parameter(
+        name='page',
+        in_=IN_QUERY,
+        description='查询时设定的页码数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
+    )
+    limits_get_parammeter = Parameter(
+        name='limits',
+        in_=IN_QUERY,
+        description='查询时设定的每页行数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
     )
 
     @swagger_auto_schema(
         request_body=None,
-        manual_parameters=[StudentInformation_get_parammeter],
+        manual_parameters=[StudentInformation_get_parammeter,
+                           page_get_parammeter, limits_get_parammeter],
         operation_id=None,
         operation_description='学生端查看自己本人的考勤记录',
         operation_summary=None,
@@ -158,7 +196,7 @@ class StudentAttendance(APIView):
         data_equipment = data_attendance(
             course_plan_id, id_list, format_type, user_id)
         if data_equipment == False:
-            return HttpResponse(dumps({'message': '所要查询的记录不存在，请确认是否课程是否开课，其他意外情况请联系教务部'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': '所要查询的记录不存在，请确认是否课程是否开课，其他意外情况请联系教务部'}),  content_type=content_type_tmp, charset='utf-8')
         else:
             return data_total_response(data_equipment, pages, limits)
     '''
@@ -181,13 +219,14 @@ class StudentAttendance(APIView):
         pattern=None,  # 当 format为 string是才填此项
         # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
         properties=post_search,
-        required=['input_string'],  # [必须的属性列表]
+        required=['input_string', 'page', 'limits'],  # [必须的属性列表]
         items=None,  # 当type是array时，填此项
     )
     StudentAttendanceInformation_post_responses_success = Response(
         description='查询考勤成绩成功的响应',
         schema=get_responses_success,
         examples={
+            'error_code': 0,
             'message': '查询成功'
         }
     )
@@ -195,6 +234,7 @@ class StudentAttendance(APIView):
         description='查询考勤成绩失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': post_error
         }
     )
@@ -234,7 +274,7 @@ class StudentAttendance(APIView):
                 test_input = eval(input_string)
             except:
                 test_input = input_string
-            if isinstance(test_input,int):
+            if isinstance(test_input, int):
                 data_equipment = list(models.TCyRunningaccount.objects.filter(
                     Q(id=test_input) |
                     Q(id_user=test_input) |
@@ -254,6 +294,6 @@ class StudentAttendance(APIView):
             data_equipment = data_attendance(
                 course_plan_id, data_equipment, format_type, user_id)
         if data_equipment == False:
-            return HttpResponse(dumps({'message': '所要查询的记录不存在，请确认是否课程是否开课，其他意外情况请联系教务部'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': '所要查询的记录不存在，请确认是否课程是否开课，其他意外情况请联系教务部'}),  content_type=content_type_tmp, charset='utf-8')
         else:
             return data_total_response(data_equipment, pages, limits)

@@ -148,6 +148,24 @@ class AttendanceInformation(APIView):
         description='这个接口用于展示成功获取全部数据的格式',
         type=TYPE_OBJECT,
         properties={
+            'error_code': Schema(
+                title='是否有报错数据',
+                description='用于传达是否有报错数据',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'page': Schema(
+                title='页码',
+                description='用于表示展示的页码数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
+            'limits': Schema(
+                title='页码',
+                description='用于表示每页展示的行数',
+                type=TYPE_INTEGER,
+                format='int32',
+            ),
             'data': Schema(
                 title='数据',
                 description='用于传递查询到的全部数据',
@@ -164,10 +182,27 @@ class AttendanceInformation(APIView):
         type=TYPE_INTEGER,
         format='int32',
     )
+    page_get_parammeter = Parameter(
+        name='page',
+        in_=IN_QUERY,
+        description='查询时设定的页码数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
+    )
+    limits_get_parammeter = Parameter(
+        name='limits',
+        in_=IN_QUERY,
+        description='查询时设定的每页行数',
+        required=True,
+        type=TYPE_INTEGER,
+        format='int32',
+    )
     AttendanceInformation_get_responses_success = Response(
         description='获取签到记录成功的响应',
         schema=get_responses_success,
         examples={
+            'error_code': 0,
             'message': '获取成功'
         }
     )
@@ -175,13 +210,15 @@ class AttendanceInformation(APIView):
         description='获取签到记录失败的响应',
         schema=responses_fail,
         examples={
-            'message': '获取成功'
+            'error_code': 1,
+            'message': '获取失败'
         }
     )
 
     @swagger_auto_schema(
         request_body=None,
-        manual_parameters=[AttendanceInformation_get_parammeter],
+        manual_parameters=[AttendanceInformation_get_parammeter,
+                           page_get_parammeter, limits_get_parammeter],
         operation_id=None,
         operation_description='获取学生签到记录',
         operation_summary=None,
@@ -206,7 +243,7 @@ class AttendanceInformation(APIView):
         data_equipment = data_attendance(
             course_plan_id, id_list, format_type, user_id)
         if data_equipment == False:
-            return HttpResponse(dumps({'message': '所要查询的记录不存在，请确认是否课程是否开课，其他意外情况请联系教务部'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': '所要查询的记录不存在，请确认是否课程是否开课，其他意外情况请联系教务部'}),  content_type=content_type_tmp, charset='utf-8')
         else:
             return data_total_response(data_equipment, pages, limits)
     '''
@@ -229,7 +266,7 @@ class AttendanceInformation(APIView):
         pattern=None,  # 当 format为 string是才填此项
         # 当 type为object时，为dict对象 {'str1': Schema对象, 'str2': SchemaRef对象}
         properties=post_search,
-        required=['input_string'],  # [必须的属性列表]
+        required=['input_string', 'page', 'limits'],  # [必须的属性列表]
         items=None,  # 当type是array时，填此项
     )
     AttendanceInformation_post_responses_success = Response(
@@ -243,6 +280,7 @@ class AttendanceInformation(APIView):
         description='查询学生签到记录失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': post_error
         }
     )
@@ -299,7 +337,7 @@ class AttendanceInformation(APIView):
             data_equipment = data_attendance(
                 course_plan_id, data_equipment, format_type, user_id)
         if data_equipment == False:
-            return HttpResponse(dumps({'message': '所要查询的记录不存在，请确认是否课程是否开课，其他意外情况请联系教务部'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': '所要查询的记录不存在，请确认是否课程是否开课，其他意外情况请联系教务部'}),  content_type=content_type_tmp, charset='utf-8')
         else:
             return data_total_response(data_equipment, pages, limits)
     '''
@@ -379,6 +417,7 @@ class AttendanceInformation(APIView):
         description='添加学生签到记录成功的响应',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': put_success
         }
     )
@@ -386,6 +425,7 @@ class AttendanceInformation(APIView):
         description='添加学生签到记录失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': put_error
         }
     )
@@ -434,9 +474,9 @@ class AttendanceInformation(APIView):
                 timeupdate=variable_name.get('timeupdate'),
                 idmanager=idmanager_object
             )
-            return HttpResponse(dumps({'message': put_success}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': put_success}), content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
     '''
     list
     list all information about Equipment
@@ -457,6 +497,7 @@ class AttendanceInformation(APIView):
         description='修改学生签到记录成功的响应',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': patch_success
         }
     )
@@ -464,6 +505,7 @@ class AttendanceInformation(APIView):
         description='修改学生签到记录失败的响应',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': patch_error
         }
     )
@@ -488,7 +530,7 @@ class AttendanceInformation(APIView):
         data_equipment_initial = list(
             models.TCyRunningaccount.objects.filter(id=id_equipment).values('id', 'id_user', 'param2', 'idmanager', 'timeupdate', 'param1', 'time', 'money', 'type_field'))
         if data_equipment_initial == []:
-            return HttpResponse(dumps({'message': id_error}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': id_error}), content_type=content_type_tmp, charset='utf-8')
         data_equipment = data_equipment_initial[0]
         field_name = ['id', 'id_user', 'param2', 'idmanager',
                       'timeupdate', 'param1', 'time', 'money', 'type_field']
@@ -512,9 +554,9 @@ class AttendanceInformation(APIView):
                 param2=variable_name.get('param2'),
                 timeupdate=variable_name.get('timeupdate'),
                 idmanager=variable_name.get('idmanager'))
-            return HttpResponse(dumps({'message': '修改签到记录成功'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': '修改签到记录成功'}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific+str(error)}),  content_type=content_type_tmp, charset='utf-8')
 
     APIView_delete_request_body = Schema(
         title=' 删除数据库中的信息 ',  # 标题
@@ -532,6 +574,7 @@ class AttendanceInformation(APIView):
         description='APIView_delete_responses is success',
         schema=responses_success,
         examples={
+            'error_code': 0,
             'message': '删除成功'
         }
     )
@@ -539,6 +582,7 @@ class AttendanceInformation(APIView):
         description='APIView_delete_responses is failure',
         schema=responses_fail,
         examples={
+            'error_code': 1,
             'message': '删除失败，请输入正确的id'
         }
     )
@@ -569,6 +613,6 @@ class AttendanceInformation(APIView):
             for i in range(numbers_id):
                 models.TCyRunningaccount.objects.filter(
                     id=variable_name.get('id_'+str(i), 'id_1')).delete()
-                return HttpResponse(dumps({'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
+                return HttpResponse(dumps({'error_code': 0, 'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')
         except Exception as error:
-            return HttpResponse(dumps({'message': data_base_error_specific + str(error)}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error_specific + str(error)}), content_type=content_type_tmp, charset='utf-8')

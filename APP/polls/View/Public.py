@@ -26,6 +26,12 @@ responses_success = Schema(
     description='将会返回的成功消息 ',
     type=TYPE_OBJECT,
     properties={
+        'error_code': Schema(
+            title='是否有报错数据',
+            description='用于传达是否有报错数据',
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
         'message': Schema(
             title='成功消息',
             description='传达的当响应成功的时候的消息',
@@ -40,6 +46,12 @@ responses_fail = Schema(
     description='将会返回的失败消息 ',
     type=TYPE_OBJECT,
     properties={
+        'error_code': Schema(
+            title='是否有报错数据',
+            description='用于传达是否有报错数据',
+            type=TYPE_INTEGER,
+            format='int32',
+        ),
         'message': Schema(
             title='失败消息',
             description='传达的当响应失败的时候的消息',
@@ -50,6 +62,18 @@ responses_fail = Schema(
 )
 
 post_search = {
+    'page': Schema(
+        title='页码',
+        description='用于表示展示的页码数',
+        type=TYPE_INTEGER,
+        format='int32',
+    ),
+    'limits': Schema(
+        title='页码',
+        description='用于表示每页展示的行数',
+        type=TYPE_INTEGER,
+        format='int32',
+    ),
     'input_string': Schema(
         title='输入的查询字符串',
         type=TYPE_STRING,
@@ -100,24 +124,23 @@ def get_request_args(func):
 
 def data_page_response(data, pages, limits):
     if list(data) == []:
-        return HttpResponse(dumps({'message': data_base_error}), content_type=content_type_tmp, charset='utf-8')
+        return HttpResponse(dumps({'error_code': 1, 'message': data_base_error}), content_type=content_type_tmp, charset='utf-8')
     object_page = Paginator(data, limits)
     total_number = object_page.num_pages
     try:
         data_response = object_page.page(pages)
     except EmptyPage:
         data_response = object_page.page(total_number)
-    return HttpResponse(dumps({'data': list(data)}), content_type=content_type_tmp, charset='utf-8')
+    return HttpResponse(dumps({'page': pages, 'limits': limits, 'total_number': total_number, 'error_code': 0, 'data': list(data_response)}), content_type=content_type_tmp, charset='utf-8')
 
 
 def data_total_response(data, pages, limits):
     data_response = list(data)
-    total_number = len(data_response)
     if data_response == []:
-        return HttpResponse(dumps({'message': "内容不存在"}), content_type=content_type_tmp, charset='utf-8')
+        return HttpResponse(dumps({'error_code': 1, 'message': "内容不存在"}), content_type=content_type_tmp, charset='utf-8')
     else:
         total_number = len(data_response)
-        return HttpResponse(dumps({'data': data_response}), content_type=content_type_tmp, charset='utf-8')
+        return HttpResponse(dumps({'page': pages, 'limits': limits, 'total_number': total_number, 'error_code': 0, 'data': data_response}), content_type=content_type_tmp, charset='utf-8')
 
 
 def data_attendance_format(data_equipment, data_plan, id_list):

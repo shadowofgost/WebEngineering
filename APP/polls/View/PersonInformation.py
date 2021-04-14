@@ -104,6 +104,7 @@ class PersonInformation(APIView):
         description='获取失败的响应',
         schema=responses_fail,
         examples={
+            'error_code':1,
             'message': '运行报错'}
     )
 
@@ -129,8 +130,8 @@ class PersonInformation(APIView):
         data_user = list(models.TCyuser.objects.filter(id=user_id).values('id', 'nocard', 'nouser', 'name', 'psw', 'deptid__name', 'sex', 'attr', 'timeupdate',
                          'userex_related_to_user_information__rem', 'localid', 'userex_related_to_user_information__timeupdate', 'userex_related_to_user_information__idmanager__name'))
         if data_user == []:
-            return HttpResponse(dumps({'message': "数据库出现错误，请联系管理员"}), content_type=content_type_tmp, charset='utf-8')
-        return HttpResponse(dumps({'data': data_user}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': "数据库出现错误，请联系管理员"}), content_type=content_type_tmp, charset='utf-8')
+        return HttpResponse(dumps({'error_code': 0, 'data': data_user}),  content_type=content_type_tmp, charset='utf-8')
 
     PersonInformation_patch_request_body = Schema(
         title="为修改个人信息更改的请求",  # 标题
@@ -148,6 +149,7 @@ class PersonInformation(APIView):
         description='修改信息成功',
         schema=responses_success,
         examples={
+            'error_code':0,
             'message': patch_success
         }
     )
@@ -155,6 +157,7 @@ class PersonInformation(APIView):
         description='修改信息失败',
         schema=responses_fail,
         examples={
+            'error_code':1,
             'message': patch_error
         }
     )
@@ -183,7 +186,7 @@ class PersonInformation(APIView):
         data_patch_rem = args.get(
             'userex_related_to_user_information__rem', None)
         if not(data_patch_name or data_patch_sex or data_patch_rem or data_patch_psw):
-            return HttpResponse(dumps({'message': patch_success}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': patch_success}), content_type=content_type_tmp, charset='utf-8')
         user_id = request.COOKIES.get('user_id')
         user_id = request.session.get(user_id)
         time_update = int(time())-946656000
@@ -192,7 +195,7 @@ class PersonInformation(APIView):
             data_user = list(
                 models.TCyuser.objects.filter(id=user_id).values('id', 'nocard', 'nouser', 'name', 'psw', 'sex', 'idmanager', 'timeupdate'))
             if data_user == []:
-                return HttpResponse(dumps({'message': data_base_error}), content_type=content_type_tmp, charset='utf-8')
+                return HttpResponse(dumps({'error_code': 1, 'message': data_base_error}), content_type=content_type_tmp, charset='utf-8')
             else:
                 data_user = data_user[0]
                 data_user['name'] = args.get('name', data_user['name'])
@@ -211,7 +214,7 @@ class PersonInformation(APIView):
                     idmanager=data_user.get('idmanager'),
                     timeupdate=data_user.get('timeupdate')
                 )
-            return HttpResponse(dumps({'message': patch_success}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': patch_success}),  content_type=content_type_tmp, charset='utf-8')
         print(2)
         if data_patch_rem:
             data_user_extend = list(
@@ -237,5 +240,5 @@ class PersonInformation(APIView):
                     idmanager=data_user_extend.get('idmanager'),
                     timeupdate=data_user_extend.get('timeupdate')
                 )
-            return HttpResponse(dumps({'message': patch_success}), content_type=content_type_tmp, charset='utf-8')
-        return HttpResponse(dumps({'message': data_base_error}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': patch_success}), content_type=content_type_tmp, charset='utf-8')
+        return HttpResponse(dumps({'error_code': 1, 'message': data_base_error}), content_type=content_type_tmp, charset='utf-8')

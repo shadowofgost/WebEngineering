@@ -24,7 +24,7 @@ class Picture(APIView):
         file =file.read()
         print(file)
         if file == None:
-            return HttpResponse(dumps({'message':'请插入图片'}))
+            return HttpResponse(dumps({'error_code': 1, 'message': '请插入图片'}))
         file_back = request.POST.get('file')
         #path = default_storage.save(
             #'E:\Programming\Engineering\Python\Django\WebInSQLServer\WebEn#gine#ering/static/'+file.name, ContentFile(file.read()))
@@ -33,7 +33,7 @@ class Picture(APIView):
             print(1)
             print(user_id)
             models.TCyuserex.objects.filter(id = user_id).update(photo = file)
-            return HttpResponse(dumps({'message': '添加数据成功'}),
+            return HttpResponse(dumps({'error_code': 0, 'message': '添加数据成功'}),
                          content_type=content_type_tmp, charset='utf-8')
         except:
-            return HttpResponse(dumps({'message': data_base_error}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': data_base_error}), content_type=content_type_tmp, charset='utf-8')

@@ -58,6 +58,12 @@ class Login(APIView):
             title='登录成功的响应值',
             type=TYPE_OBJECT,
             properties={
+                'error_code': Schema(
+                    title='是否有报错数据',
+                    description='用于传达是否有报错数据',
+                    type=TYPE_INTEGER,
+                    format='int32',
+                ),
                 'userid': Schema(
                     title='登录者的账号名',
                     description='登录者的账号名，对应的是nouser字段相当于账号的唯一标识（相当于学生学号）',
@@ -92,7 +98,7 @@ class Login(APIView):
             type=TYPE_STRING,
             format='string',
         ),
-        examples={'message': 'fail'}
+        examples={'error_code': 1, 'message': 'fail'}
     )
 
     @swagger_auto_schema(
@@ -126,19 +132,20 @@ class Login(APIView):
         user_id = args.get("user_id")
         password = args.get("password")
         if len(str(user_id)) == 0 or len(password) == 0:
-            return HttpResponse(dumps({'message': '请输入用户名和密码'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': '请输入用户名和密码'}),  content_type=content_type_tmp, charset='utf-8')
         # select data from database based on the id of the user.
         data = tuple(models.TCyuser.objects.filter(
             nouser=str(user_id)).values())
         if data == ():
-            return HttpResponse(dumps({'message': "用户名不存在，重新输入用户名或者进行注册"}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': "用户名不存在，重新输入用户名或者进行注册"}),  content_type=content_type_tmp, charset='utf-8')
         else:
             data = data[0]
             data_password = data.get('psw', None)
             data_attr = data.get('attr', None)
             user_id = data.get('id', None)
+            user_nouser = data.get('nouser', None)
             if data_password != password:
-                return HttpResponse(dumps({'message': '登录失败'}), content_type=content_type_tmp, charset='utf-8')
+                return HttpResponse(dumps({'error_code': 1, 'message': '登录失败'}), content_type=content_type_tmp, charset='utf-8')
             # 若用户名或密码失败,则将提示语与跳转链接继续传递到前端
             else:
                 print(1)
@@ -147,13 +154,16 @@ class Login(APIView):
                 is_login = str(uuid4())
                 user_id_session = str(uuid4())
                 user_group_id = str(uuid4())
+                user_nouser_session = str(uuid4())
                 http_response.set_cookie("is_login", is_login)
                 http_response.set_cookie('user_id', user_id_session)
                 http_response.set_cookie('user_group_id', user_group_id)
+                http_response.set_cookie('user_nouser', user_nouser_session)
                 # 2.设置session的值
                 request.session[is_login] = True
                 request.session[user_id_session] = user_id
                 request.session[user_group_id] = data_attr
+                request.session[user_nouser_session] = user_nouser
                 urls = {'0': '/polls/SuperAdministration/',
                         '1': '/polls/AcademicAdministration/',
                         '2': '/polls/Counsellor/',
