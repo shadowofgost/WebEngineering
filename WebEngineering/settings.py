@@ -10,12 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from datetime import timedelta
+from celery.schedules import crontab
 import os
 import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(BASE_DIR, 'APP'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'Apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -44,8 +46,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'captcha',
-    # 'polls.apps.PollsConfig',
-    'polls'
+    'polls',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -86,10 +89,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'WebEngineering',
-        'HOST': '61.155.169.144',
+        'HOST': 'localhost',
         'PORT': '1433',
-        'USER': 'wangliang',
-        'PASSWORD': 'suda123456',
+        'USER': 'web',
+        'PASSWORD': '@WzR@CsY@1260',
         'OPTIONS': {
             'driver': 'SQL Server Native Client 11.0',
             'MARS_Connection': True,
@@ -248,3 +251,75 @@ ROOT_URLCONF = 'WebEngineering.urls'
 pythoWSGI_APPLICATION = 'WebEngineering.wsgi.application'
 RUNSERVERPLUS_SERVER_ADDRESS_PORT = 'localhost:9000'
 ROOT_URLCONF = 'WebEngineering.urls'
+############################################
+# 发送邮件功能
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True  # 是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
+EMAIL_USE_SSL = False  # 是否使用SSL加密，qq企业邮箱要求使用
+EMAIL_HOST = 'smtp.office365.com'
+# EMAIL_HOST = "smtp-mail.outlook.com"
+EMAIL_PORT = 587  # 发件箱的SMTP服务器端口
+EMAIL_HOST_USER = 'shadowofgost@outlook.com'  # 发送邮件的邮箱地址
+EMAIL_HOST_PASSWORD = '@WzR@CsY@1260'  # smtp.office365.com邮箱可以直接使用密码
+EMAIL_FROM = 'shadowofgost@outlook.com'  # 必须与EMAIL_HOST_USER相同
+# 使用smtp.office365.com邮件服务器时，必须设置DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+##########################################
+# Celery settings
+# Broker的地址
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/2'
+
+# 任务执行返回结果
+CELERY_RESULT_BACKEND = 'django-db'
+
+# celery内容等消息的格式设置
+CELERY_ACCEPT_CONTENT = ['application/json', ]
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_IMPORTS = (
+    'polls.Tasks.urls')
+# celery时区设置，使用settings中TIME_ZONE同样的时区
+CELERY_TIMEZONE = TIME_ZONE
+# 避免时区的问题
+CELERY_ENABLE_UTC = False
+DJANGO_CELERY_BEAT_TZ_AWARE = False
+# 定时任务
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# 定时任务
+CELERY_BEAT_SCHEDULE = {
+    # 每十秒执行一次add方法
+    'test': {
+        'task': 'add',
+
+        # 多长时间执行一次
+        # 每个周一的20:57分执行一次mul方法
+        'schedule': crontab(),  # 支持直接用数字表示秒数
+        # 'schedule': timedelta(seconds=10), # 可以用timedelta对象
+
+        # 必要的参数，这里指add()的参数
+        'args': (16, 26)
+    },
+    'Email': {
+        'task': 'email',
+
+        # 多长时间执行一次
+        # 每个周一的20:57分执行一次mul方法
+        'schedule': crontab(),  # 支持直接用数字表示秒数
+        # 'schedule': timedelta(seconds=10), # 可以用timedelta对象
+
+        # 必要的参数，这里指add()的参数
+        'args': ()
+    },
+    'QuitWarning': {
+        'task': 'warning',
+
+        # 多长时间执行一次
+        # 每个周一的20:57分执行一次mul方法
+        'schedule': crontab(),  # 支持直接用数字表示秒数
+        # 'schedule': timedelta(seconds=10), # 可以用timedelta对象
+
+        # 必要的参数，这里指add()的参数
+        'args': ()
+    },
+    # 每个周一的20:57分执行一次mul方法
+}

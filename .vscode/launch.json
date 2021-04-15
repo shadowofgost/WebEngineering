@@ -13,23 +13,6 @@
 			"django": true
 		},
 		{
-			"name": "Pyramid ",
-			"type": "python",
-			"request": "launch",
-			"module": "pyramid.scripts.pserve",
-			"args": ["${workspaceFolder}\\development.ini"],
-			"pyramid": true,
-			"jinja": true
-		},
-		{
-			"name": "FastAPI",
-			"type": "python",
-			"request": "launch",
-			"module": "uvicorn",
-			"args": ["main:app"],
-			"jinja": true
-		},
-		{
 			"name": "Django",
 			"type": "python",
 			"request": "launch",
@@ -38,38 +21,11 @@
 			"django": true
 		},
 		{
-			"name": "Python: PID",
-			"type": "python",
-			"request": "attach",
-			"processId": "${command:pickProcess}"
-		},
-		{
-			"name": "Python: 模块",
-			"type": "python",
-			"request": "launch",
-			"module": "请输入模块名称"
-		},
-		{
 			"name": "Python",
 			"type": "python",
 			"request": "launch",
 			"program": "${file}",
 			"console": "integratedTerminal"
-		},
-		{
-			"name": "Python: 远程连接",
-			"type": "python",
-			"request": "attach",
-			"connect": {
-				"host": "localhost",
-				"port": 5678
-			},
-			"pathMappings": [
-				{
-					"localRoot": "${workspaceFolder}",
-					"remoteRoot": "."
-				}
-			]
 		}
 	]
 }
