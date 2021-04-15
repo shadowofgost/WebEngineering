@@ -241,7 +241,7 @@ class CourseInformation(APIView):
             ),
             'error_code': Schema(
                 title='是否有报错数据',
-                description='用于传达是否有报错数据',
+                description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
                 type=TYPE_INTEGER,
                 format='int32',
             ),
@@ -256,7 +256,10 @@ class CourseInformation(APIView):
     CourseInformation_get_responses_success = Response(
         description='查询课程信息成功的响应',
         schema=get_responses_success,
-        examples=None,
+        examples={
+            'error_code': 0,
+            'message': '查询课程信息成功'
+        },
     )
     CourseInformation_get_responses_fail = Response(
         description='查询课程信息失败的响应',
@@ -328,7 +331,8 @@ class CourseInformation(APIView):
                 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
             ).distinct().order_by('id')
         elif user_group_id == 4:
-            data_equipment = models.TCycurricula.objects.filter(Q(rangeusers__icontains=user_nouser)).values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
+            data_equipment = models.TCycurricula.objects.filter(Q(rangeusers__icontains=user_nouser)).values('id', 'name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection', 'dooropen',
+                                                                                                             'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
             #data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user=user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous','pwdirection','dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
             # if data_equipment == []:
             # return HttpResponse(dumps({'error_code': 1, 'message': '没有选课或者还未开始上课'}),content_type=content_type_tmp,charset='utf-8')

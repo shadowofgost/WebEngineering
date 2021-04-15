@@ -28,7 +28,7 @@ responses_success = Schema(
     properties={
         'error_code': Schema(
             title='是否有报错数据',
-            description='用于传达是否有报错数据',
+            description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
             type=TYPE_INTEGER,
             format='int32',
         ),
@@ -48,7 +48,7 @@ responses_fail = Schema(
     properties={
         'error_code': Schema(
             title='是否有报错数据',
-            description='用于传达是否有报错数据',
+            description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
             type=TYPE_INTEGER,
             format='int32',
         ),
@@ -410,3 +410,23 @@ def data_attendance(course_plan_id, id_list, format_type, user_id):
         data_equipment = data_students_attendance_format(
             data_equipment, data_plan, id_list)
     return data_equipment
+
+
+def select_quit_warning_student(course_plan_id, id_list, format_type, user_id, limit_not_attendrates, limit_not_attendtimes):
+    '''
+    这个函数是用来读取每一门课不符合要求的学生名单
+    '''
+    data = data_attendance(
+        course_plan_id, id_list, format_type, user_id)
+    select_student = []
+    for j in data:
+        personal_data = {}
+        attendtimes = int(j['attendtimes'])
+        attendtotal = int(j['attendtotal'])
+        if limit_not_attendtimes < attendtotal - attendtimes or limit_not_attendrates < 1 - int(limit_not_attendrates):
+            personal_data['id_user__nouser'] = j['id_user__nouser']
+            personal_data['id_user__name'] = j['id_user__name']
+            personal_data['id_user__email'] = j['id_user__email']
+            personal_data['id_user__quit'] = attendtotal - attendtimes
+            select_student.append(personal_data)
+    return select_student

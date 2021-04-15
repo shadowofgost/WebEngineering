@@ -6,7 +6,6 @@ from json import dumps
 from .. import models
 from copy import deepcopy
 from .Public import responses_success, responses_fail, get_request_args, post_search, content_type_tmp, data_page_response, post_success, post_error, patch_success, patch_error, put_success, put_error, data_base_error_specific, id_error, data_attendance, delete_schema
-from .APIViewDelete import APIViewDelete
 from rest_framework.views import APIView
 
 
@@ -150,7 +149,7 @@ class AttendanceInformation(APIView):
         properties={
             'error_code': Schema(
                 title='是否有报错数据',
-                description='用于传达是否有报错数据',
+                description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
                 type=TYPE_INTEGER,
                 format='int32',
             ),

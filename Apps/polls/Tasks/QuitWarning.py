@@ -7,27 +7,9 @@ from django.core.mail import send_mail
 from django.db.models.deletion import SET_NULL
 from .. import models
 from ..Views.Public import data_attendance
+from ..Views.Public import select_quit_warning_student
 
 # 此定时任务目的在于检测不合格学生以及考勤不合格学生，并用邮件提醒老师。
-
-
-def select_quit_warning_student(course_plan_id, id_list, format_type, user_id):
-    data = data_attendance(
-        course_plan_id, id_list, format_type, user_id)
-    limit_not_attendtimes = 3
-    limit_not_attendrates = 0.2
-    select_student = []
-    for j in data:
-        personal_data = {}
-        attendtimes = int(j['attendtimes'])
-        attendtotal = int(j['attendtotal'])
-        if limit_not_attendtimes < attendtotal - attendtimes or limit_not_attendrates < 1 - int(limit_not_attendrates):
-            personal_data['id_user__nouser'] = j['id_user__nouser']
-            personal_data['id_user__name'] = j['id_user__name']
-            personal_data['id_user__email'] = j['id_user__email']
-            personal_data['id_user__quit'] = attendtotal - attendtimes
-            select_student.append(personal_data)
-    return select_student
 
 
 def send_email_course(select_student, course_name, id_speaker__name, id_speaker__email):
@@ -49,7 +31,7 @@ def send_email_course(select_student, course_name, id_speaker__name, id_speaker_
 
 
 @shared_task
-def warning():
+def warning(limit_not_attendtimes=3, limit_not_attendrates=0.2):
     data_course = tuple(models.TCycurricula.objects.all().values(
         'id', 'name', 'id_speaker__name', 'id_speaker__email'
         'rangeusers', 'listdepts'
@@ -59,9 +41,9 @@ def warning():
     user_id = 1910404051
     for i in data_course:
         course_plan_id = i['id']
-        select_student = select_quit_warning_student(
-            course_plan_id, id_list, format_type, user_id)
-        send_email_course(select_student, i['name'],
+        select_students = select_quit_warning_student(
+            course_plan_id, id_list, format_type, user_id, limit_not_attendrates, limit_not_attendtimes)
+        send_email_course(select_students, i['name'],
                           i['id_speaker__name'], i['id_speaker__emai'])
     print('success')
     return 'success'

@@ -298,28 +298,6 @@ CELERY_BEAT_SCHEDULE = {
 
         # 必要的参数，这里指add()的参数
         'args': (16, 26)
-    },
-    'Email': {
-        'task': 'email',
-
-        # 多长时间执行一次
-        # 每个周一的20:57分执行一次mul方法
-        'schedule': crontab(),  # 支持直接用数字表示秒数
-        # 'schedule': timedelta(seconds=10), # 可以用timedelta对象
-
-        # 必要的参数，这里指add()的参数
-        'args': ()
-    },
-    'QuitWarning': {
-        'task': 'warning',
-
-        # 多长时间执行一次
-        # 每个周一的20:57分执行一次mul方法
-        'schedule': crontab(),  # 支持直接用数字表示秒数
-        # 'schedule': timedelta(seconds=10), # 可以用timedelta对象
-
-        # 必要的参数，这里指add()的参数
-        'args': ()
-    },
+    }
     # 每个周一的20:57分执行一次mul方法
 }

@@ -17,6 +17,7 @@ from .Views.StudentsInformation import StudentsInformation
 from .Views.TeachersInformation import TeachersInformation
 from .Views.UserInformation import UserInformation
 from .Views.Picture import Picture
+from .Views.QuitWarning import QuitWarning
 from .Views.StudentView import student_login, student_index, student_changepsw, student_lessons, student_changepswsuccess, student_attendtime, student_lessoninfo, student_statistics
 app_name = 'polls'
 urlpatterns = [
@@ -50,6 +51,7 @@ urlpatterns = [
     path('CourseArrangement/',
          CourseArrangement.as_view(),
          name='CourseArrangement'),
+    path('QuitWarning/', QuitWarning.as_view(), name='QuitWarning'),
     #path('UserInformation/',UserInformation.as_view(), name='UserInformation'),
     path('Picture/', Picture.as_view(), name='Picture'),
     path('student/login/', student_login, name='student_login'),

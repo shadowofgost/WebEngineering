@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q, Count
 from django.db import connection
@@ -6,13 +5,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Parameter, Schema, Response, TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from rest_framework.views import APIView
 from json import dumps, loads
-from time import localtime, strftime, time
 from .. import models
-from math import ceil
-from django.core.paginator import Paginator, EmptyPage
-from captcha.models import CaptchaStore
-from captcha.helpers import captcha_image_url
-from copy import deepcopy
 from .Public import responses_fail, data_attendance, get_request_args, post_search, content_type_tmp, data_page_response, post_error
 from rest_framework.views import APIView
 
@@ -113,7 +106,7 @@ class StudentAttendance(APIView):
             ),
             'error_code': Schema(
                 title='是否有报错数据',
-                description='用于传达是否有报错数据',
+                description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
                 type=TYPE_INTEGER,
                 format='int32',
             ),

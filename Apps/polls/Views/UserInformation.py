@@ -4,8 +4,6 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Parameter, Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from .. import models
 from json import dumps
-from copy import deepcopy
-from .APIViewDelete import APIViewDelete
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp,  patch_error, patch_success, post_search, post_error, put_error, put_success, id_error, data_base_error_specific, delete_schema
 from rest_framework.views import APIView
 
@@ -121,7 +119,7 @@ class UserInformation(APIView):
         ),
             'error_code': Schema(
             title='是否有报错数据',
-            description='用于传达是否有报错数据',
+            description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
             type=TYPE_INTEGER,
             format='int32',
         ),

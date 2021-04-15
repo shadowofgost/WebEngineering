@@ -60,7 +60,7 @@ class Login(APIView):
             properties={
                 'error_code': Schema(
                     title='是否有报错数据',
-                    description='用于传达是否有报错数据',
+                    description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
                     type=TYPE_INTEGER,
                     format='int32',
                 ),

@@ -5,8 +5,6 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Parameter, Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from json import dumps
 from .. import models
-from copy import deepcopy
-from .APIViewDelete import APIViewDelete
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_success, patch_error, id_error, delete_schema
 from rest_framework.views import APIView
 
@@ -244,7 +242,7 @@ class CourseArrangement(APIView):
             ),
             'error_code': Schema(
                 title='是否有报错数据',
-                description='用于传达是否有报错数据',
+                description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
                 type=TYPE_INTEGER,
                 format='int32',
             ),
@@ -306,7 +304,7 @@ class CourseArrangement(APIView):
         pages = int(args.get('page', 1))
         limits = int(args.get('limits', 20))
         data_equipment = models.TCyplan.objects.all().values('id',
-        'id_curricula__name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
+                                                             'id_curricula__name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
         return data_page_response(data_equipment, pages, limits)
     '''
     list

@@ -4,8 +4,6 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Parameter, Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from .. import models
 from json import dumps
-from copy import deepcopy
-from .APIViewDelete import APIViewDelete
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp,  patch_error, patch_success, post_search, post_error, put_error, put_success, id_error, data_base_error_specific, delete_schema
 from rest_framework.views import APIView
 
@@ -122,7 +120,7 @@ class StudentsInformation(APIView):
             ),
             'error_code': Schema(
                 title='是否有报错数据',
-                description='用于传达是否有报错数据',
+                description='用于传达是否有报错数据，0表示没有报错数据，1表示有报错数据',
                 type=TYPE_INTEGER,
                 format='int32',
             ),
@@ -237,7 +235,8 @@ class StudentsInformation(APIView):
         pages = int(args.get('page', 1))
         limits = int(args.get('limits', 20))
         if input_string == None:
-            data_user_information = models.TCyuser.objects.filter(attr=4).values('id', 'nocard', 'nouser', 'name', 'psw', 'deptid__name', 'sex', 'attr', 'timeupdate','userex_related_to_user_information__rem', 'localid', 'userex_related_to_user_information__timeupdate', 'userex_related_to_user_information__idmanager__name').distinct().order_by('id')
+            data_user_information = models.TCyuser.objects.filter(attr=4).values('id', 'nocard', 'nouser', 'name', 'psw', 'deptid__name', 'sex', 'attr', 'timeupdate', 'userex_related_to_user_information__rem',
+                                                                                 'localid', 'userex_related_to_user_information__timeupdate', 'userex_related_to_user_information__idmanager__name').distinct().order_by('id')
             return data_page_response(data_user_information, pages, limits)
         else:
             input_string = input_string.strip()

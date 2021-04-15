@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg.openapi import Schema, Response, TYPE_FILE, TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING
+from drf_yasg.openapi import Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING
 from rest_framework.views import APIView
 from json import dumps
 from time import time
@@ -98,13 +98,14 @@ class PersonInformation(APIView):
             description='成功数据',
             type=TYPE_OBJECT,
             properties=data_schema
-        ), examples=None
+        ),
+        examples=None
     )
     PersonInformation_get_responses_fail = Response(
         description='获取失败的响应',
         schema=responses_fail,
         examples={
-            'error_code':1,
+            'error_code': 1,
             'message': '运行报错'}
     )
 
@@ -149,7 +150,7 @@ class PersonInformation(APIView):
         description='修改信息成功',
         schema=responses_success,
         examples={
-            'error_code':0,
+            'error_code': 0,
             'message': patch_success
         }
     )
@@ -157,7 +158,7 @@ class PersonInformation(APIView):
         description='修改信息失败',
         schema=responses_fail,
         examples={
-            'error_code':1,
+            'error_code': 1,
             'message': patch_error
         }
     )
@@ -221,7 +222,7 @@ class PersonInformation(APIView):
                     timeupdate=time_update,
                     imark=1,
                     photo_dataf='None',
-                    idmanager = user_id
+                    idmanager=user_id
                 )
             else:
                 data_user_extend = data_user_extend[0]
