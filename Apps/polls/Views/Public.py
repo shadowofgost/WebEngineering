@@ -392,7 +392,7 @@ def data_attendance(course_plan_id, id_list, format_type, user_id):
             'id', 'timebegin', 'timeend', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckend', 'timeendcheckbegin', 'id_curricula__name').order_by('id'))
     elif format_type == 2:
         data_equipment = tuple(models.TCyRunningaccount.objects.filter(param2__id_curricula=course_plan_id).values(
-            'id', 'id_user__name', 'id_user', 'time', 'type_field', 'param2', 'timeupdate', 'idmanager__name').order_by('param2'))
+            'id', 'id_user__name', 'id_user', 'id_user__nouser', 'time', 'type_field', 'param2', 'timeupdate', 'idmanager__name').order_by('param2'))
         data_plan = tuple(models.TCyplan.objects.filter(id_curricula=course_plan_id).values(
             'id', 'timebegin', 'timeend', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckend', 'timeendcheckbegin', 'id_curricula__name').order_by('id'))
     if data_plan == [] or data_equipment == []:

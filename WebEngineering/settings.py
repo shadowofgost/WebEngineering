@@ -28,7 +28,8 @@ SECRET_KEY = 'wvqtx(q%q%@y5al+hj)xz&)fwb=f#(akdp+fjv*gzo_9tmm-*%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.3.25', '10.20.7.53', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.3.25', '10.20.7.53',
+                 'localhost', '127.0.0.1', '61.155.169.144', '47.117.68.250']
 
 
 # Application definition
@@ -91,8 +92,8 @@ DATABASES = {
         'NAME': 'WebEngineering',
         'HOST': 'localhost',
         'PORT': '1433',
-        'USER': 'web',
-        'PASSWORD': '@WzR@CsY@1260',
+        'USER': 'wangliang',
+        'PASSWORD': 'suda123456',
         'OPTIONS': {
             'driver': 'SQL Server Native Client 11.0',
             'MARS_Connection': True,
