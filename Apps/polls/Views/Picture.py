@@ -1,21 +1,18 @@
 from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg.openapi import IN_FORM, Parameter, Schema, Response, TYPE_FILE, TYPE_OBJECT, TYPE_STRING, TYPE_INTEGER
+from drf_yasg.openapi import IN_FORM, Parameter, Response, TYPE_FILE, IN_QUERY
 from rest_framework.views import APIView
 from json import dumps
-from time import time
 from .. import models
 from .Public import responses_success, responses_fail, get_request_args, content_type_tmp,  patch_error, patch_success, data_base_error
-from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.conf import settings
-import os
 
 
 class Picture(APIView):
     post_parammeter = Parameter(
         name='图片',
-        in_=IN_FORM,
+        in_=IN_QUERY,
         description='传输每个人的图片',
         required=True,
         type=TYPE_FILE,

@@ -139,7 +139,7 @@ class QuitWarning(APIView):
 
     @swagger_auto_schema(
         operation_description='这个端口用于提醒老师和管理员多次缺勤的学生',
-        operation_summary=[page_get_parammeter, limits_get_parammeter],
+        manual_parameters=[page_get_parammeter, limits_get_parammeter],
         security=None,
         responses={
             200: Warning_get_responses_success,
