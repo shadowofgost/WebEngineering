@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg.openapi import  Schema, Response, TYPE_INTEGER, TYPE_OBJECT
+from drf_yasg.openapi import Schema, Response, TYPE_INTEGER, TYPE_OBJECT
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 from json import dumps
 from .. import models
-from .Public import responses_success, responses_fail, get_request_args,post_success, content_type_tmp,post_error
+from .Public import responses_success, responses_fail, get_request_args, post_success, content_type_tmp, post_error
+
 
 class IDEvaluation(APIView):
     '''
@@ -42,7 +44,7 @@ class IDEvaluation(APIView):
         description='post请求成功的时候',
         schema=responses_success,
         examples={
-            'error_code':0,
+            'error_code': 0,
             'message': post_success
         }
     )
@@ -50,7 +52,7 @@ class IDEvaluation(APIView):
         description='post请求失败的时候',
         schema=responses_fail,
         examples={
-            'error_code':1,
+            'error_code': 1,
             'message': post_error
         }
     )
@@ -66,6 +68,7 @@ class IDEvaluation(APIView):
                    401: IDEvaluation_post_responses_fail},
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         '''
         This method is to varify id information about user,equipment,course,login user.
@@ -74,7 +77,7 @@ class IDEvaluation(APIView):
         kind_evaluation = args.get('kind', None)
         data = []
         if not(id_evaluation or kind_evaluation):
-            return HttpResponse(dumps({'error_code': 1,'message': '请勿空提交'}), content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 1, 'message': '请勿空提交'}), content_type=content_type_tmp, charset='utf-8')
         if kind_evaluation == 1:
             data = list(models.TCyuser.objects.filter(
                 id=id_evaluation).values())
@@ -105,4 +108,4 @@ class IDEvaluation(APIView):
         if data == []:
             return HttpResponse(dumps({'error_code': 1, 'message': 'id不存在'}),  content_type=content_type_tmp, charset='utf-8')
         else:
-            return HttpResponse(dumps({'error_code': 0,'message': 'id存在'}),  content_type=content_type_tmp, charset='utf-8')
+            return HttpResponse(dumps({'error_code': 0, 'message': 'id存在'}),  content_type=content_type_tmp, charset='utf-8')

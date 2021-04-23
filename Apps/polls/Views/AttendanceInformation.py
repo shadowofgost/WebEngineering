@@ -7,7 +7,7 @@ from .. import models
 from copy import deepcopy
 from .Public import responses_success, responses_fail, get_request_args, post_search, content_type_tmp, data_page_response, post_success, post_error, patch_success, patch_error, put_success, put_error, data_base_error_specific, id_error, data_attendance, delete_schema
 from rest_framework.views import APIView
-
+from django.views.decorators.csrf import csrf_exempt
 
 class AttendanceInformation(APIView):
     '''
@@ -228,6 +228,7 @@ class AttendanceInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -296,6 +297,7 @@ class AttendanceInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -442,6 +444,7 @@ class AttendanceInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -521,6 +524,7 @@ class AttendanceInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

@@ -6,6 +6,7 @@ from json import dumps
 from .. import models
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_error, id_error, no_idea, delete_schema
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 
 class EquipmentInformation(APIView):
@@ -306,6 +307,7 @@ class EquipmentInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -359,6 +361,7 @@ class EquipmentInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -463,6 +466,7 @@ class EquipmentInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request, args, session):
         '''
         This method is to use to add equipment information
@@ -579,6 +583,7 @@ class EquipmentInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

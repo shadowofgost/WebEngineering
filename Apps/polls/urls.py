@@ -23,6 +23,7 @@ app_name = 'polls'
 urlpatterns = [
     path('Logout/', Logout.as_view(), name='Logout'),
     path('Login/', Login.as_view(), name='Login'),
+    path('', Login.as_view(), name='Login_test'),
     path('PersonInformation/',
          PersonInformation.as_view(),
          name='PersonInformation'),

@@ -13,7 +13,8 @@ class TCydept(models.Model):
         default=1, null=True, db_column='TimeUpdate')
     idmanager = models.IntegerField(
         default=1, null=True, db_column='IdManager')
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)
     bakc_up1 = models.CharField(
@@ -80,9 +81,10 @@ class TCylocation(models.Model):
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=1024, blank=True)
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='location_related_to_user'
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='location_related_to_user', null=True
     )
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)
     back_up1 = models.CharField(default='1', null=True,
@@ -139,7 +141,7 @@ class TCycurricula(models.Model):
                                           db_column='TimeEndCheckEnd', blank=True)
     ######0代表无效######
     rangeusers = models.CharField(default='1', null=True,
-                                  db_column='RangeUsers', max_length=1024, blank=True)
+                                  db_column='RangeUsers', max_length=4096, blank=True)
     listdepts = models.CharField(default='1', null=True,
                                  db_column='ListDepts', max_length=1024, blank=True)
     rangeequs = models.CharField(default='1', null=True,
@@ -152,12 +154,14 @@ class TCycurricula(models.Model):
                                     db_column='AboutSpeaker', max_length=1024, blank=True)
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=1024, blank=True)
+    # 来自教务系统的课程编号
     timeupdate = models.IntegerField(default=1, null=True, db_column='TimeUpdate',
                                      blank=True)
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='curricula_related_to_user'
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='curricula_related_to_user', null=True
     )
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     bakc_up1 = models.CharField(default='1', null=True,
                                 max_length=254, blank=True)
     back_up2 = models.IntegerField(default=1, null=True, blank=True)
@@ -206,7 +210,7 @@ class TCyplan(models.Model):
     timeendcheckend = models.IntegerField(default=1, null=True,
                                           db_column='TimeEndCheckEnd', blank=True)
     rangeusers = models.CharField(default='1', null=True,
-                                  db_column='RangeUsers', max_length=1024, blank=True)
+                                  db_column='RangeUsers', max_length=4096, blank=True)
     listdepts = models.CharField(default='1', null=True,
                                  db_column='ListDepts', max_length=1024, blank=True)
     rangeequs = models.CharField(default='1', null=True,
@@ -218,12 +222,13 @@ class TCyplan(models.Model):
     aboutspeaker = models.CharField(default='1', null=True,
                                     db_column='AboutSpeaker', max_length=1024, blank=True)
     rem = models.CharField(default='1', null=True,
-                           db_column='Rem', max_length=1024, blank=True)
+                           db_column='Rem', max_length=1024, blank=True)  # 来自教务系统的课程编号
     timeupdate = models.IntegerField(default=1, null=True, db_column='TimeUpdate',
                                      blank=True)
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE,  db_column='IdManager', related_name='plan_related_to_user')
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+        TCyuser, to_field="id", on_delete=models.CASCADE,  db_column='IdManager', related_name='plan_related_to_user', null=True)
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     back_up1 = models.CharField(default='1', null=True,
                                 max_length=254, blank=True)
     back_up2 = models.CharField(default='1', null=True,
@@ -259,7 +264,7 @@ class TCyequipment(models.Model):
     # link网络状态，0：脱机、1：在线，######## Field renamed because it was a Python reserved word.
     class_field = models.SmallIntegerField(
         default=1, null=True, db_column='Class', blank=True)
-    ########class_field0：PC设备、2：刷卡设备，#######
+    ########class_field0：PC设备、2：刷卡设备，11:服务器设备#######
     dx = models.IntegerField(default=1, null=True, db_column='Dx', blank=True)
     dy = models.IntegerField(default=1, null=True, db_column='Dy', blank=True)
     id_user = models. ForeignKey(
@@ -280,7 +285,7 @@ class TCyequipment(models.Model):
                                      db_column='TimeUpdate', blank=True
                                      )
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='equipment_related_to_user'
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='equipment_related_to_user', null=True
     )
     portlisten = models.IntegerField(default=1, null=True,
                                      db_column='PortListen', blank=True
@@ -303,7 +308,8 @@ class TCyequipment(models.Model):
                                  db_column='RangeEqus', max_length=64, blank=True)
     listplaces = models.CharField(default='1', null=True,
                                   db_column='ListPlaces', max_length=64, blank=True)
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     back_up1 = models.CharField(default='1', null=True,
                                 max_length=254, blank=True)
     back_up2 = models.IntegerField(default=1, null=True, blank=True)
@@ -324,9 +330,10 @@ class TCyTableInfo(models.Model):
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='kaoqin_related_to_user'
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='kaoqin_related_to_user', null=True
     )
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     back_up1 = models.CharField(
         default='1', null=True,  max_length=254, blank=True)
     back_up2 = models.IntegerField(default=1, null=True, blank=True)
@@ -392,9 +399,10 @@ class TCylocationex(models.Model):
                                      db_column='TimeUpdate', blank=True
                                      )
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='locationex_related_to_user'
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='locationex_related_to_user', null=True
     )
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)
     back_up1 = models.CharField(default='1', null=True,
@@ -418,9 +426,10 @@ class TCymmx(models.Model):
                                      db_column='TimeUpdate', blank=True
                                      )
     idmanager = models.ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='mmx_related_to_user'
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='mmx_related_to_user', null=True
     )
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)
     back_up1 = models.CharField(default='1', null=True,
@@ -439,10 +448,11 @@ class TCymmxdata(models.Model):
                                      db_column='TimeUpdate', blank=True
                                      )
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='mmxdata_related_to_user'
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='mmxdata_related_to_user', null=True
     )
     data = models.TextField(db_column='Data', blank=True)
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)
     back_up1 = models.CharField(default='1', null=True,
@@ -476,8 +486,9 @@ class TCyRunningaccount(models.Model):
     timeupdate = models.IntegerField(default=1, null=True, db_column='TimeUpdate',
                                      blank=True)
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='runningaccount_related_to_user')
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='runningaccount_related_to_user', null=True)
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)
     back_up1 = models.CharField(default='1', null=True,
@@ -500,9 +511,10 @@ class TCytypera(models.Model):
                                      db_column='TimeUpdate', blank=True
                                      )
     idmanager = models. ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='typera_related_to_user'
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='typera_related_to_user', null=True
     )
-    imark = models.SmallIntegerField(default=1, null=True, db_column='IMark')
+    imark = models.SmallIntegerField(
+        default=1, null=True, db_column='IMark')  # 1代表已经删除
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)
     back_up1 = models.CharField(default='1', null=True,
@@ -522,7 +534,7 @@ class TCyuserex(models.Model):
     timeupdate = models.IntegerField(default=1, null=True,
                                      db_column='TimeUpdate', blank=True)
     idmanager = models.ForeignKey(
-        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='userex_related_to_user')
+        TCyuser, to_field="id", on_delete=models.CASCADE, db_column='IdManager', related_name='userex_related_to_user', null=True)
     imark = models.IntegerField(default=1, null=True, db_column='IMark')
     rem = models.CharField(default='1', null=True,
                            db_column='Rem', max_length=64)

@@ -90,7 +90,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'WebEngineering',
-        'HOST': 'localhost',
+        'HOST': '61.155.169.144',
         'PORT': '1433',
         'USER': 'wangliang',
         'PASSWORD': 'suda123456',
@@ -143,10 +143,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
-    '/var/www/static/',
     ('css', os.path.join(STATIC_ROOT, 'css')),
     ('img', os.path.join(STATIC_ROOT, 'img')),
     ('js', os.path.join(STATIC_ROOT, 'js')),
+    ('fonts', os.path.join(STATIC_ROOT, 'fonts')),
 ]
 # 验证码
 CAPTCHA_IMAGE_SIZE = (80, 30)
@@ -156,7 +156,7 @@ CAPTCHA_TIMEOUT = 1
 # Settings for front information
 
 CORS_ORIGIN_WHITELIST = ('http://localhost:9000',
-                         'http://localhost:8308', 'http://localhost:8080', 'Https://127.0.0.1:9000')
+                         'http://localhost:8081', 'http://localhost:8080')
 # 添加CORS配置
 # 设置白名单
 # 设置CORS的COOKIES
@@ -232,9 +232,9 @@ SESSION_COOKIES_PATH = "/"                # Session的COOKIES保存的路径（�
 SESSION_COOKIES_DOMAIN = True             # Session的COOKIES保存的域名（默认）
 SESSION_COOKIES_SECURE = True            # 是否Https传输COOKIES（默认）
 SESSION_COOKIES_HTTPONLY = False           # 是否Session的COOKIES只支持http传输（默认）
-SESSION_COOKIES_AGE = 1800                # Session的COOKIES失效日期（2周）（数字为秒数）（默认）
+SESSION_COOKIES_AGE = 18000                # Session的COOKIES失效日期（2周）（数字为秒数）（默认）
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True   # 是否关闭浏览器使得Session过期（默认）
-SESSION_SAVE_EVERY_REQUEST = True        # 是否每次请求都保存Session，默认修改之后才保存（默认）
+SESSION_SAVE_EVERY_REQUEST = True          # 是否每次请求都保存Session，默认修改之后才保存（默认）
 DCS_SESSION_COOKIES_SAMESITE = 'None'
 CSRF_COOKIES_SAMESITE = None
 # Cache settings

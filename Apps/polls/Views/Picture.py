@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import IN_FORM, Parameter, Response, TYPE_FILE, IN_QUERY
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 from json import dumps
 from .. import models
 from .Public import responses_success, responses_fail, get_request_args, content_type_tmp,  patch_error, patch_success, data_base_error
@@ -47,7 +48,8 @@ class Picture(APIView):
         },
         tags=None)
     @get_request_args
-    def post(self, request):
+    @csrf_exempt
+    def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
             return HttpResponse(dumps({'code': 0}),  content_type=content_type_tmp, charset='utf-8')
