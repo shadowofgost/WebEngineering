@@ -6,6 +6,7 @@ from .. import models
 from json import dumps
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp,  patch_error, patch_success, post_search, post_error, put_error, put_success, id_error, data_base_error_specific, delete_schema
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 
 class UserInformation(APIView):
@@ -171,6 +172,7 @@ class UserInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -226,6 +228,7 @@ class UserInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -313,6 +316,7 @@ class UserInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -405,6 +409,7 @@ class UserInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

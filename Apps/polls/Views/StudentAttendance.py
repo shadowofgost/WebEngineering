@@ -4,10 +4,12 @@ from django.db import connection
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Parameter, Schema, Response, TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 from json import dumps, loads
 from .. import models
 from .Public import responses_fail, data_attendance, get_request_args, post_search, content_type_tmp, data_page_response, post_error
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 
 class StudentAttendance(APIView):
@@ -173,6 +175,7 @@ class StudentAttendance(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -244,6 +247,7 @@ class StudentAttendance(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

@@ -4,11 +4,10 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Parameter, Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from json import dumps
 from .. import models
-from .Public import  responses_fail,get_request_args,post_search, content_type_tmp, data_page_response, post_success, post_error
+from .Public import responses_fail, get_request_args, post_search, content_type_tmp, data_page_response, post_success, post_error
 from .AttendanceInformation import AttendanceInformation
 from .Public import data_attendance
-
-
+from django.views.decorators.csrf import csrf_exempt
 
 class AttendanceInformationClass(AttendanceInformation):
     '''
@@ -224,6 +223,7 @@ class AttendanceInformationClass(AttendanceInformation):
                          },
                          tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -287,6 +287,7 @@ class AttendanceInformationClass(AttendanceInformation):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

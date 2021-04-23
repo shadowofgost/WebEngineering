@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.db.models import  Count
+from django.db.models import Count
 from django.db import connection
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 from json import dumps
 from .. import models
 from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
 
 
-tmp ='index.html'
+tmp = 'index.html'
+
+
 def check_session_index(request):
     status = request.session.get('is_login')
     if not status:
@@ -17,6 +20,8 @@ def check_session_index(request):
     return render(request, "check_session_index.html")
 
 # 用于将request转化的函数
+
+
 def index(request):
     return HttpResponse('你好！这里是投票系统')
 
@@ -174,44 +179,47 @@ class Department(APIView):
         }
         return HttpResponse(tmp)
 
-##废除的函数
+# 废除的函数
 
 
 def data_attendance_class_format(
-    data_equipment, data_equipment_back, data_personal):
+        data_equipment, data_equipment_back, data_personal):
     return 0
 
 
-##废除函数
+# 废除函数
 def data_attendance_class(course_plan_id, id_list, format_type, user_id):
     data_equipment = list(
-         models.TCyRunningaccount.objects.filter(
-              id_plan=course_plan_id,
-              status__gt=0).annotate(attendnumbers=Count('id_user')).values(
-              'time', 'attendnumbers').order_by('time'))
+        models.TCyRunningaccount.objects.filter(
+            id_plan=course_plan_id,
+            status__gt=0).annotate(attendnumbers=Count('id_user')).values(
+            'time', 'attendnumbers').order_by('time'))
     data_equipment_back = list(
-          models.TCyRunningaccount.objects.filter(
-               id_plan=course_plan_id, ).annotate(
-                    totalnumbers=Count('id_user')).values(
-                        'time', 'totalnumbers').order_by('time'))
+        models.TCyRunningaccount.objects.filter(
+            id_plan=course_plan_id, ).annotate(
+            totalnumbers=Count('id_user')).values(
+            'time', 'totalnumbers').order_by('time'))
     data_personal = list(
-           models.TCyRunningaccount.objects.filter(
-                id_plan=course_plan_id).values('id', 'id_user__name', 'status', 'time', 'idmanager__name', 'timeupdate').order_by('time'))
+        models.TCyRunningaccount.objects.filter(
+            id_plan=course_plan_id).values('id', 'id_user__name', 'status', 'time', 'idmanager__name', 'timeupdate').order_by('time'))
     if id_list == []:
         for j in data_equipment_back:
-                id_list.append(j['time'])
+            id_list.append(j['time'])
     data_equipment = data_attendance_class_format(
-            data_equipment, data_equipment_back, data_personal)
+        data_equipment, data_equipment_back, data_personal)
     return data_equipment
-##废除的函数
+# 废除的函数
+
 
 def data_students_attendance_format(
         data_equipment, data_equipment_back, data_personal):
     return 0
-##废除的函数
+# 废除的函数
+
+
 def data_students_attendance(user_id, id_list):
     data_equipment = list(models.TCyRunningaccount.objects.filter(
-        id_user=user_id, status__gt= 0).annotate(attendtimes = Count('id')).values('id_plan', 'id_plan__id_curricula__name', 'id_plan__weekday', 'attendtimes').order_by('id_plan'))
+        id_user=user_id, status__gt=0).annotate(attendtimes=Count('id')).values('id_plan', 'id_plan__id_curricula__name', 'id_plan__weekday', 'attendtimes').order_by('id_plan'))
     data_equipment_back = list(
         models.TCyRunningaccount.objects.filter(
             id_user=user_id).annotate(attendtotal=Count('id')).values(
@@ -225,16 +233,22 @@ def data_students_attendance(user_id, id_list):
         data_equipment, data_equipment_back, data_personal)
     return data_equipment
 
-## 创建验证码
+# 创建验证码
+
+
 def captcha():
-    hashkey = CaptchaStore.generate_key()   #验证码答案
-    image_url = captcha_image_url(hashkey)  #验证码地址
+    hashkey = CaptchaStore.generate_key()  # 验证码答案
+    image_url = captcha_image_url(hashkey)  # 验证码地址
     captcha = {'hashkey': hashkey, 'image_url': image_url}
     return captcha
-##刷新验证码
+# 刷新验证码
+
+
 def refresh_captcha(request):
     return HttpResponse(dumps(captcha()), content_type='application/json')
-## 验证验证码
+# 验证验证码
+
+
 def jarge_captcha(captchaStr, captchaHashkey):
     if captchaStr and captchaHashkey:
         try:
@@ -246,17 +260,20 @@ def jarge_captcha(captchaStr, captchaHashkey):
             return False
     else:
         return False
+
+
 class IndexView(APIView):
     def get(self, request):
         hashkey = CaptchaStore.generate_key()  # 验证码答案
         image_url = captcha_image_url(hashkey)  # 验证码地址
         captcha = {'hashkey': hashkey, 'image_url': image_url}
         return render(request, "login.html", locals())
-    def post(self,request):
-        capt=request.POST.get("captcha",None)         #用户提交的验证码
-        key=request.POST.get("hashkey",None)          #验证码答案
-        if jarge_captcha(capt,key):
-            return  HttpResponse("验证码正确")
+
+    def post(self, request):
+        capt = request.POST.get("captcha", None)  # 用户提交的验证码
+        key = request.POST.get("hashkey", None)  # 验证码答案
+        if jarge_captcha(capt, key):
+            return HttpResponse("验证码正确")
         else:
             return HttpResponse("验证码错误")
 
@@ -265,7 +282,7 @@ class SuperAdminstration(APIView):
     def get(self, request):
         if not request.session.get('is_login', None):
             # 如果本来就未登录，也就没有登出一说
-            return render(request,tmp)
+            return render(request, tmp)
         status = request.session.get('is_login')
         userid = request.session.get('user_id')
         if not status:
@@ -285,14 +302,14 @@ class SuperAdminstration(APIView):
             data_name = ('Nocard', 'NoUser', 'Name',
                          'Psw', 'Deptid', 'sex', 'attr')
             data_result = dict(zip(data_name, data))
-            #t = {"data": {
+            # t = {"data": {
             #        "user_id": userid,
             #        "user_name": data[0][2],
             #        "password": data[0][3],
             #        "user_groupid": data[0][-1],
             #        "user_photo": data_photo[0][0],
             #    }
-            #}
+            # }
             return render(request, tmp, data_result)
 
     def post(self, request):

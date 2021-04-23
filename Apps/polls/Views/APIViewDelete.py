@@ -2,9 +2,10 @@ from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Schema, Response, TYPE_INTEGER, TYPE_OBJECT
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 from json import dumps
 from .. import models
-from .Public import responses_success,responses_fail,get_request_args,content_type_tmp,data_base_error_specific
+from .Public import responses_success, responses_fail, get_request_args, content_type_tmp, data_base_error_specific
 id_schema = Schema(
     title='信息查询的id号',
     description='数据库表中需要被删除的字段的id号',
@@ -24,6 +25,8 @@ delete_schema = {
         properties=[id_schema, id_schema]
     )
 }
+
+
 class APIViewDelete(APIView):
     APIView_delete_request_body = Schema(
         title=' 删除数据库中的信息 ',  # 标题
@@ -65,6 +68,7 @@ class APIViewDelete(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def delete(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -75,7 +79,7 @@ class APIViewDelete(APIView):
         for i in range(numbers_id):
             variable_name['id_'+str(i)] = delete_data[i].get('data_id')
         try:
-            for i in range( numbers_id):
+            for i in range(numbers_id):
                 models.TCyequipment.objects.filter(
                     id=variable_name.get('id_'+str(i), 'id_1')).delete()
             return HttpResponse(dumps({'message': '数据删除成功'}),  content_type=content_type_tmp, charset='utf-8')

@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Schema, Response, Parameter, TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING, IN_QUERY
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 from json import dumps
 from time import time
 from .. import models
@@ -147,6 +148,7 @@ class QuitWarning(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

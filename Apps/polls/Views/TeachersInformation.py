@@ -7,6 +7,7 @@ from .. import models
 from .StudentsInformation import StudentsInformation
 from .Public import responses_fail, get_request_args, content_type_tmp,  patch_error, data_page_response, post_search, post_error
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 
 class TeachersInformation(StudentsInformation):
@@ -176,6 +177,7 @@ class TeachersInformation(StudentsInformation):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -232,6 +234,7 @@ class TeachersInformation(StudentsInformation):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

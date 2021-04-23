@@ -7,6 +7,7 @@ from json import dumps
 from .. import models
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_success, patch_error, id_error, delete_schema
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 
 class CourseArrangement(APIView):
@@ -297,6 +298,7 @@ class CourseArrangement(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -350,6 +352,7 @@ class CourseArrangement(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -522,6 +525,7 @@ class CourseArrangement(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request, args, session):
         field_name = [
             'id', 'id_curricula__name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'timeupdate',
@@ -634,6 +638,7 @@ class CourseArrangement(APIView):
                          },
                          tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

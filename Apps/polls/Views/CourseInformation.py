@@ -6,6 +6,7 @@ from json import dumps
 from .. import models
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_success, patch_error, id_error, delete_schema
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 
 class CourseInformation(APIView):
@@ -299,6 +300,7 @@ class CourseInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -307,6 +309,7 @@ class CourseInformation(APIView):
         limits = int(args.get('limits', 20))
         user_group_id = request.COOKIES.get('user_group_id')
         user_group_id = request.session.get(user_group_id)
+        print(user_group_id)
         user_id = request.COOKIES.get('user_id')
         user_id = request.session.get(user_id)
         user_nouser = request.COOKIES.get('user_nouser')
@@ -385,6 +388,7 @@ class CourseInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
