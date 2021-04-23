@@ -431,7 +431,7 @@ class CourseInformation(APIView):
                     'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces',
                     'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
                 ).distinct().order_by('id')
-                # data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user =  user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
+                # data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user = user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
                 # if data_equipment == []:
                 # return HttpResponse(dumps({'error_code': 1, 'message': '没有选课或者还未开始上课'}),content_type=content_type_tmp,charset='utf-8')
         # if data_equipment == []:
