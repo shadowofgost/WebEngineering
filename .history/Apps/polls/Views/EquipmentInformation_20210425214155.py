@@ -499,6 +499,7 @@ class EquipmentInformation(APIView):
                 id=variable_name.get('id_location'))
             user_object = models.TCyuser.objects.get(
                 id=variable_name.get('id_user'))
+
             idmanager_object = models.TCyuser.objects.get(
                 id=variable_name.get('idmanager'))
             ueses_tmp = models.TCyequipment.objects.create(

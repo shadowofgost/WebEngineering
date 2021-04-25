@@ -499,6 +499,8 @@ class EquipmentInformation(APIView):
                 id=variable_name.get('id_location'))
             user_object = models.TCyuser.objects.get(
                 id=variable_name.get('id_user'))
+            plan_object = models.TCyplan.objects.get(
+                id=variable_name.get('id_plan'))
             idmanager_object = models.TCyuser.objects.get(
                 id=variable_name.get('idmanager'))
             ueses_tmp = models.TCyequipment.objects.create(

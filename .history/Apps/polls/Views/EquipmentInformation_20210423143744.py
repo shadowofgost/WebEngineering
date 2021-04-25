@@ -499,6 +499,8 @@ class EquipmentInformation(APIView):
                 id=variable_name.get('id_location'))
             user_object = models.TCyuser.objects.get(
                 id=variable_name.get('id_user'))
+            plan_object = models.TCyplan.objects.get(
+                id=variable_name.get('id_plan'))
             idmanager_object = models.TCyuser.objects.get(
                 id=variable_name.get('idmanager'))
             ueses_tmp = models.TCyequipment.objects.create(
@@ -515,7 +517,7 @@ class EquipmentInformation(APIView):
                 dx=variable_name.get('dx'),
                 dy=variable_name.get('dy'),
                 id_user=user_object,
-                id_plan=variable_name.get('id_plan'),
+                id_plan=plan_object,
                 itimebegin=variable_name.get('itimebegin'),
                 whitelist=variable_name.get('whitelist'),
                 rem=variable_name.get('rem'),
