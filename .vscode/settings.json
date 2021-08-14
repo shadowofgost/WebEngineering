@@ -1,6 +1,6 @@
 {
     "git.ignoreLimitWarning": true,
-    "python.pythonPath": "venv\\Scripts\\python.exe",
+    "python.pythonPath": "D:\\Professional\\Interpretation\\Python\\python.exe",
     "editor.snippetSuggestions": "bottom",
     "editor.suggest.snippetsPreventQuickSuggestions": false,
     "liveServer.settings.port": 6233

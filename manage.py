@@ -4,10 +4,7 @@ import os
 import sys
 from django.core.management.commands.runserver import Command as Runserver
 
-
 def main():
-    o_path = os.getcwd()
-    sys.path.append(o_path)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'WebEngineering.settings')
     try:
         from django.core.management import execute_from_command_line
@@ -22,5 +19,5 @@ def main():
 
 if __name__ == '__main__':
     Runserver.default_addr = 'localhost'  # 修改默认地址
-    Runserver.default_port = 9000  # 修改默认端口
+    Runserver.default_port = '9000'	# 修改默认端口
     main()

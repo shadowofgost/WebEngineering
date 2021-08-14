@@ -1,0 +1,96 @@
+from django.shortcuts import HttpResponse
+from django.http import JsonResponse
+from django.core import serializers
+from app01.models import Person
+import json
+
+def getPerson1(request):
+    """用HttpResponse，把字典以json格式传回"""
+    if request.method == "GET":
+        res = {"status": "错误", "data": "1th", "city": "杭州"}
+        # return HttpResponse(json.dumps(res, ensure_ascii=False)) # 少了content_type，默认application/text
+        return HttpResponse(json.dumps(res, ensure_ascii=False), content_type="application/json,charset=utf-8")
+
+
+def getPerson2(request):
+    """用JsonResponse，把字典以json格式传回"""
+    if request.method == "GET":
+        res = {"status": "错误", "data": "1th", "city": "杭州"}
+        # return JsonResponse(res) # 这样中文会乱码
+        return JsonResponse(res, json_dumps_params={'ensure_ascii': False})
+
+
+def getPerson3(request):
+    """用HttpResponse，serialize序列化对象，把对象以json格式传回"""
+    if request.method == "GET":
+        res = serializers.serialize("json", Person.objects.all())  # 把所有Person对象序列化
+        return HttpResponse(json.dumps(json.loads(res), ensure_ascii=False), content_type="application/json,charset=utf-8")
+
+
+def getPerson4(request):
+    """用JsonResponse，serialize序列化对象，把对象以json格式传回"""
+    if request.method == "GET":
+        res = serializers.serialize("json", Person.objects.all())  # 把所有Person对象序列化
+        res = json.loads(res)  # 把字符串转成json格式
+        return JsonResponse(res, json_dumps_params={'ensure_ascii': False}, safe=False)
+
+
+def setPerson(request):
+    if request.method == "POST":
+        data = json.loads(request.body)  # 转成字典
+        Person.objects.create(name=data["name"], age=data["age"])
+        # 方式一： JsonResponse返回
+        return JsonResponse({"status": 200, "message": "成功"}, json_dumps_params={'ensure_ascii': False}, safe=False)
+        # 方式二： HttpResponse返回
+        return HttpResponse(json.dumps({"status": 200, "message": "成功"}, ensure_ascii=False), content_type="application/json,charset=utf-8")
+
+class RunningAccountModel(models.Model):
+    id = models.IntegerField( default = 1, null =true , db_column='ID', blank=True, primary_key=True)
+    id_user = models.OneToOneField(UserModel, to_field="id", on_delete=models.CASCADE,
+                                   db_column='ID_User')
+    id_plan= models.OneToOneField(CoursePlanModel, to_field="id", on_delete=models.CASCADE, db_column='ID_Plan')
+    status= models.IntegerField( default = 1, null =true , db_column='Status',blank=True,default=0)
+    ####0表示缺席，1表示签到，2表示签退
+    time = models.IntegerField( default = 1, null =true , db_column='Time', blank=True)
+    type = models.IntegerField( default = 1, null =true , db_column='Type', blank=True)
+    ######type例如：交费、存款：0x101，赠费： 0x102，退费、取款：0x103，扣费、罚款：0x104，纠错，取消某次缴费、赠费等：0x106，上机费： 0x201,考勤： 0x1001######
+    money = models.IntegerField( default = 1, null =true , db_column='Money', blank=True)
+    ######money发生的费用，单位为分#####
+    param1 = models.IntegerField( default = 1, null =true , db_column='Param1', blank=True)
+    ######param1收费管理员的ID：Type=0x101、0x102、0x103、0x104、0x106,上机机位编号： Type = 0x201,门禁考勤机编号：Type = 0x1001######
+    param2 = models.IntegerField( default = 1, null =true , db_column='Param2', blank=True)
+    ######param2取消交易记录的ID： Type=0x106,讲座、课程编号： Type = 0x201、0x1001######
+    timeupdate = models.IntegerField( default = 1, null =true , db_column='TimeUpdate',
+                                     blank=True)
+    idmanager = models.IntegerField( default = 1, null =true ,
+        db_column='IdManager', blank=True)
+    back_up1 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up2 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up3 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up4 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up5 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up7 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up8 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+
+    class Meta:
+        db_table = 't_runningaccount'
+
+class TyperaModel(models.Model):
+    id = models.OneToOneField(RunningAccountModel, to_field="id", on_delete=models.CASCADE,
+                              primary_key=True, db_column='ID')
+    id_parent = models.IntegerField( default = 1, null =true ,
+        db_column='ID_Parent', blank=True)
+    name = models.CharField(default = '1', null =True ,
+        db_column='Name', max_length=32, blank=True)
+    timeupdate = models.IntegerField( default = 1, null =true , db_column='TimeUpdate',
+                                     blank=True)
+    idmanager = models.IntegerField( default = 1, null =true ,
+        db_column='IdManager', blank=True)
+    back_up1 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up2 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up3 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up4 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+    back_up5 = models.CharField(default = '1', null =True ,  max_length=254, blank=True, null=True)
+
+    class Meta:
+        db_table = 't_cytypera'
