@@ -5,7 +5,7 @@ from django.db.models import Q,Count
 from django.db import connection
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Parameter, Schema, Response, TYPE_FILE, TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING,IN_QUERY
-from rest_framework.views import APIView
+from rest_framework.views import APIView    from django.views.decorators.csrf import csrf_exempt
 from json import dumps, loads
 from time import localtime, strftime,time
 from . import models
@@ -923,6 +923,7 @@ class APIViewDelete(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def delete(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -1045,6 +1046,7 @@ class Login(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         print(1)
         if request.session.get('is_login', False):
@@ -1322,6 +1324,7 @@ class PersonInformation(APIView):
             },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -1378,6 +1381,7 @@ class PersonInformation(APIView):
             401: PersonInformation_patch_responses_fail},
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -1496,6 +1500,7 @@ class IDEvaluation(APIView):
                    401: IDEvaluation_post_responses_fail},
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         '''
         This method is to varify id information about user,equipment,course,login user.
@@ -1818,6 +1823,7 @@ class EquipmentInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -1871,6 +1877,7 @@ class EquipmentInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -1998,6 +2005,7 @@ class EquipmentInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request,args,session):
         '''
         This method is to use to add equipment information
@@ -2096,6 +2104,7 @@ class EquipmentInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -2213,6 +2222,7 @@ class StudentsInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -2266,6 +2276,7 @@ class StudentsInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -2364,6 +2375,7 @@ class StudentsInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -2447,6 +2459,7 @@ class StudentsInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -2517,6 +2530,7 @@ class TeachersInformation(StudentsInformation):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -2569,6 +2583,7 @@ class TeachersInformation(StudentsInformation):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -2885,6 +2900,7 @@ class CourseInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -2944,6 +2960,7 @@ class CourseInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -3150,6 +3167,7 @@ class CourseInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -3264,6 +3282,7 @@ class CourseInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -3394,6 +3413,7 @@ class CourseArrangement(CourseInformation):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login=request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -3577,6 +3597,7 @@ class CourseArrangement(CourseInformation):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -3681,6 +3702,7 @@ class CourseArrangement(CourseInformation):
                          },
                          tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -3874,6 +3896,7 @@ class AttendanceInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -3937,6 +3960,7 @@ class AttendanceInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4064,6 +4088,7 @@ class AttendanceInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4134,6 +4159,7 @@ class AttendanceInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4308,6 +4334,7 @@ class AttendanceInformationClass(AttendanceInformation):
                          },
                          tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4366,6 +4393,7 @@ class AttendanceInformationClass(AttendanceInformation):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4552,6 +4580,7 @@ class StudentAttendance(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4617,6 +4646,7 @@ class StudentAttendance(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4690,6 +4720,7 @@ class LocationInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4742,6 +4773,7 @@ class LocationInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -4846,6 +4878,7 @@ class LocationInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request,args,session):
         '''
         This method is to use to add equipment information
@@ -4944,6 +4977,7 @@ class LocationInformation(APIViewDelete):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request,args,session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

@@ -5,6 +5,15 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Python: 远程连接",
+			"type": "python",
+			"request": "attach",
+			"connect": { "host": "172.18.42.211", "port": 5678 },
+			"pathMappings": [
+				{ "localRoot": "${workspaceFolder}", "remoteRoot": "." }
+			]
+		},
+		{
 			"name": " Django-PLUS",
 			"type": "python",
 			"request": "launch",

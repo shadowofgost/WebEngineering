@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Schema, Response,  TYPE_INTEGER, TYPE_OBJECT, TYPE_STRING
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
+
 from json import dumps
 from .. import models
 from captcha.models import CaptchaStore
@@ -19,10 +21,7 @@ class Login(APIView):
     # TODO:把登录的html更改为李乐晗的html
 
     def get(self, request):
-        hashkey = CaptchaStore.generate_key()  # 验证码答案
-        image_url = captcha_image_url(hashkey)  # 验证码地址
-        captcha = {'hashkey': hashkey, 'image_url': image_url}
-        return render(request, "login.html", locals())
+        return render(request, "index.html")
     '''
     List:
     Check the Login and redirect to the Front page
@@ -114,6 +113,7 @@ class Login(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         if request.session.get('is_login', False):
             # 如果本来就未登录，也就没有登出一说

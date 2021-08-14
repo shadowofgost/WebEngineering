@@ -6,6 +6,7 @@ from json import dumps
 from .. import models
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_error, id_error, no_idea, delete_schema
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 
 class EquipmentInformation(APIView):
@@ -306,6 +307,7 @@ class EquipmentInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -359,6 +361,7 @@ class EquipmentInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -463,6 +466,7 @@ class EquipmentInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def put(self, request, args, session):
         '''
         This method is to use to add equipment information
@@ -495,8 +499,6 @@ class EquipmentInformation(APIView):
                 id=variable_name.get('id_location'))
             user_object = models.TCyuser.objects.get(
                 id=variable_name.get('id_user'))
-            plan_object = models.TCyplan.objects.get(
-                id=variable_name.get('id_plan'))
             idmanager_object = models.TCyuser.objects.get(
                 id=variable_name.get('idmanager'))
             ueses_tmp = models.TCyequipment.objects.create(
@@ -513,7 +515,7 @@ class EquipmentInformation(APIView):
                 dx=variable_name.get('dx'),
                 dy=variable_name.get('dy'),
                 id_user=user_object,
-                id_plan=plan_object,
+                id_plan=variable_name.get('id_plan'),
                 itimebegin=variable_name.get('itimebegin'),
                 whitelist=variable_name.get('whitelist'),
                 rem=variable_name.get('rem'),
@@ -579,6 +581,7 @@ class EquipmentInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def patch(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):

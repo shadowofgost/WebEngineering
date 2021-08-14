@@ -108,13 +108,16 @@ def get_request_args(func):
             args = request.GET
             session = request.session
         else:
-            body = request.body
+            body_local = request.data
             session = request.session
-            if body:
-                try:
-                    args = loads(body)
-                except Exception as e:
-                    args = request.POST
+            if body_local:
+                if isinstance(body_local, dict):
+                    args = body_local
+                else:
+                    try:
+                        args = loads(body_local)
+                    except Exception as e:
+                        args = request.POST
             else:
                 args = request.POST
         return func(self, request, args, session)
@@ -395,7 +398,7 @@ def data_attendance(course_plan_id, id_list, format_type, user_id):
             'id', 'id_user__name', 'id_user', 'id_user__nouser', 'time', 'type_field', 'param2', 'timeupdate', 'idmanager__name').order_by('param2'))
         data_plan = tuple(models.TCyplan.objects.filter(id_curricula=course_plan_id).values(
             'id', 'timebegin', 'timeend', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckend', 'timeendcheckbegin', 'id_curricula__name').order_by('id'))
-    if data_plan == [] or data_equipment == []:
+    if data_plan == () or data_equipment == ():
         return []
     if id_list == []:
         for j in data_equipment:

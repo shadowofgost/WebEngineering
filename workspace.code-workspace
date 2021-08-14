@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\WebView"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true,
+		"liveServer.settings.port": 6233,
+		"editor.snippetSuggestions": "bottom",
+		"editor.suggest.snippetsPreventQuickSuggestions": false,
+		"python.pythonPath": "venv\\Scripts\\python.exe"
+	}
+}

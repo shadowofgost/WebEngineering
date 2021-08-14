@@ -6,6 +6,7 @@ from json import dumps
 from .. import models
 from .Public import responses_success, responses_fail, get_request_args, data_page_response, content_type_tmp, post_search, put_success, put_error, post_error, data_base_error_specific, patch_success, patch_error, id_error, delete_schema
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 
 class CourseInformation(APIView):
@@ -299,6 +300,7 @@ class CourseInformation(APIView):
         },
         tags=None)
     @get_request_args
+    @csrf_exempt
     def get(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -307,6 +309,7 @@ class CourseInformation(APIView):
         limits = int(args.get('limits', 20))
         user_group_id = request.COOKIES.get('user_group_id')
         user_group_id = request.session.get(user_group_id)
+        print(user_group_id)
         user_id = request.COOKIES.get('user_id')
         user_id = request.session.get(user_id)
         user_nouser = request.COOKIES.get('user_nouser')
@@ -331,13 +334,13 @@ class CourseInformation(APIView):
                 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
             ).distinct().order_by('id')
         elif user_group_id == 4:
-            data_equipment = models.TCycurricula.objects.filter(Q(rangeusers__icontains=user_nouser)).values('id', 'name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection', 'dooropen',
-                                                                                                             'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
-            #data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user=user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous','pwdirection','dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
+            data_equipment = models.TCycurricula.objects.filter(Q(rangeusers__icontains=str(user_nouser))).values('id', 'name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous', 'pwdirection',
+                                                                                                                  'dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
+            # data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user=user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name', 'id_speaker__name', 'attr', 'charge', 'pwaccess', 'pwcontinuous','pwdirection','dooropen', 'timebegincheckbegin', 'timebegincheckend', 'timeendcheckbegin', 'timeendcheckend', 'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces', 'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
             # if data_equipment == []:
             # return HttpResponse(dumps({'error_code': 1, 'message': '没有选课或者还未开始上课'}),content_type=content_type_tmp,charset='utf-8')
         # if data_equipment == []:
-            #data_equipment = models.TCycurricula.objects.all().values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen','timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
+            # data_equipment = models.TCycurricula.objects.all().values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen','timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
         return data_page_response(data_equipment, pages, limits)
     '''
     list
@@ -372,7 +375,7 @@ class CourseInformation(APIView):
         }
     )
 
-    @swagger_auto_schema(
+    @ swagger_auto_schema(
         request_body=CourseInformation_post_request_body,
         manual_parameters=None,
         operation_id=None,
@@ -384,7 +387,8 @@ class CourseInformation(APIView):
             400: CourseInformation_post_responses_fail
         },
         tags=None)
-    @get_request_args
+    @ get_request_args
+    @ csrf_exempt
     def post(self, request, args, session):
         is_login = request.COOKIES.get('is_login')
         if not request.session.get(is_login, None):
@@ -419,7 +423,7 @@ class CourseInformation(APIView):
                     'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
                 ).distinct().order_by('id')
             elif user_group_id == 4:
-                data_equipment = models.TCycurricula.objects.filter(Q(rangeusers__icontains=user_nouser)).values(
+                data_equipment = models.TCycurricula.objects.filter(Q(rangeusers__icontains=str(user_nouser))).values(
                     'id', 'name', 'timebegin', 'timeend', 'id_location__name',
                     'id_speaker__name', 'attr', 'charge', 'pwaccess',
                     'pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin',
@@ -427,11 +431,11 @@ class CourseInformation(APIView):
                     'rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces',
                     'idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem'
                 ).distinct().order_by('id')
-                # data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user = user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
+                # data_equipment = models.TCycurricula.objects.filter(id_curricula__runningaccount_related_to_plan__id_user =  user_id).values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen', 'timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
                 # if data_equipment == []:
                 # return HttpResponse(dumps({'error_code': 1, 'message': '没有选课或者还未开始上课'}),content_type=content_type_tmp,charset='utf-8')
         # if data_equipment == []:
-            #data_equipment = models.TCycurricula.objects.all().values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen','timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
+            # data_equipment = models.TCycurricula.objects.all().values('id', 'name', 'timebegin', 'timeend', 'id_location__name','id_speaker__name', 'attr', 'charge', 'pwaccess','pwcontinuous', 'pwdirection', 'dooropen','timebegincheckbegin','timebegincheckend', 'timeendcheckbegin', 'timeendcheckend','rangeusers', 'listdepts', 'rangeequs', 'timeupdate', 'listplaces','idmanager__name', 'mapuser2equ', 'aboutspeaker', 'rem').distinct().order_by('id')
         else:
             input_string = input_string.strip()
             try:
