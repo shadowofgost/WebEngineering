@@ -5,6 +5,9 @@
     "folders": [
         {
             "path": "."
+        },
+        {
+            "path": "..\\WebView"
         }
     ]
 }
