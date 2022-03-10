@@ -1,0 +1,729 @@
+"editor.suggestSelection": "first",
+            "[jsonc]": {
+                "editor.defaultFormatter": "esbenp.prettier-vscode"
+            },
+            "python.jediEnabled": false,
+            "matlab.matlabpath": "D:\\Professional\\Matlab\\bin\\matlab.exe",
+            "matlab.mlintpath": "D:\\Professional\\Matlab\\bin\\win64\\mlint.exe",
+            "explorer.confirmDelete": false,
+            "matlab.linterEncoding": "GB2312",
+            "code-runner.clearPreviousOutput": true,
+            "code-runner.runInTerminal": true,
+            "code-runner.saveAllFilesBeforeRun": true,
+            "code-runner.saveFileBeforeRun": true,
+            "editor.wordWrap": "bounded",
+            "editor.formatOnPaste": true,
+            "editor.formatOnType": true,
+            "files.autoGuessEncoding": true,
+            "files.insertFinalNewline": true,
+            "files.trimFinalNewlines": true,
+            "files.trimTrailingWhitespace": true,
+            "workbench.commandPalette.history": 100,
+            "workbench.list.horizontalScrolling": true,
+            "todo-tree.tree.showScanModeButton": false,
+            "window.restoreFullscreen": true,
+            "remote.downloadExtensionsLocally": true,
+            "remote.restoreForwardedPorts": true,
+            "timeline.showView": true,
+            "sync.autoUpload": true,
+            "debug.allowBreakpointsEverywhere": true,
+            "debug.inlineValues": true,
+            "debug.showBreakpointsInOverviewRuler": true,
+            "scm.alwaysShowActions": true,
+            "scm.alwaysShowProviders": true,
+            "extensions.closeExtensionDetailsOnViewChange": true,
+            "eslint.alwaysShowStatus": true,
+            "go.buildOnSave": "workspace",
+            "go.lintOnSave": "package",
+            "go.vetOnSave": "package",
+            "go.buildTags": "",
+            "go.buildFlags": [],
+            "go.lintFlags": [],
+            "go.vetFlags": [],
+            "go.coverOnSave": false,
+            "go.useCodeSnippetsOnFunctionSuggest": false,
+            "go.formatOnSave": true,
+            "go.formatTool": "goreturns",
+            "go.goroot": "D:/Professional/Interpretation/Go/go1.16",
+            "go.gopath": "D:/Professional/Interpretation/Go/gopath",
+            "go.gocodeAutoBuild": true,
+            "files.autoSave": "afterDelay",
+            "liveServer.settings.donotShowInfoMsg": true,
+            "git.enableSmartCommit": true,
+            "gitlens.advanced.messages": {
+                "suppressCommitHasNoPreviousCommitWarning": true,
+                "suppressGitMissingWarning": true
+            },
+            "diffEditor.ignoreTrimWhitespace": false,
+            "git.confirmForcePush": false,
+            "git.confirmEmptyCommits": false,
+            "files.associations": {
+                "*.go": "go",
+                "KRUSK.C": "cpp",
+                "*.rmd": "markdown",
+                "*.html": "html"
+            },
+            "go.autocompleteUnimportedPackages": true,
+            "qtForPython.path.designer": "F:\\QTdesigner\\5.14.1\\mingw73_64\\bin\\designer.exe",
+            "qtForPython.path.linguist": "F:\\QTdesigner\\5.14.1\\mingw73_64\\bin\\linguist.exe",
+            "qtForPython.path.lrelease": "F:\\QTdesigner\\5.14.1\\mingw73_64\\bin\\lrelease.exe",
+            "qtForPython.path.qmlscene": "F:\\QTdesigner\\5.14.1\\mingw73_64\\bin\\qmlscene.exe",
+            "qtForPython.path.pyuic": "pyuic5 -d -o ./\"${fileBasenameNoExtension}.py",
+            "qtForPython.path.pyrcc": "pyrcc5 -o ./\"${fileBasenameNoExtension}.py",
+            "qtForPython.path.pylupdate": "pylupdate5 -verbose -ts ./\"${fileBasenameNoExtension}.qt.ts",
+            "better-comments.highlightPlainText": true,
+            "C_Cpp.default.cppStandard": "c++20",
+            "C_Cpp.experimentalFeatures": "Enabled",
+            "C_Cpp.intelliSenseEngineFallback": "Enabled",
+            "code-runner.temporaryFileName": "temporary file",
+            "code-runner.fileDirectoryAsCwd": true,
+            "java.debug.settings.showStaticVariables": true,
+            "java.debug.settings.showQualifiedNames": true,
+            "eslint.debug": true,
+            "gitlens.debug": true,
+            "go.inferGopath": true,
+            "go.testOnSave": true,
+            "liveshare.allowGuestDebugControl": true,
+            "liveshare.allowGuestTaskControl": true,
+            "markdown.extension.toc.githubCompatibility": true,
+            "markdown.extension.toc.orderedList": true,
+            "material-icon-theme.showUpdateMessage": true,
+            "npm-intellisense.showBuildInLibs": true,
+            "prettier.arrowParens": "always",
+            "prettier.jsxSingleQuote": true,
+            "prettier.tabWidth": 4,
+            "prettier.useTabs": true,
+            "python.analysis.memory.keepLibraryLocalVariables": true,
+            "python.analysis.memory.keepLibraryAst": true,
+            "python.autoComplete.addBrackets": true,
+            "mssql.applyLocalization": true,
+            "mssql.copyIncludeHeaders": true,
+            "mssql.format.alignColumnDefinitionsInColumns": true,
+            "mssql.format.placeSelectStatementReferencesOnNewLine": true,
+            "mssql.intelliSense.lowerCaseSuggestions": true,
+            "mssql.logDebugInfo": true,
+            "tslint.suppressWhileTypeErrorsPresent": true,
+            "tslint.alwaysShowStatus": true,
+            "kite.showWelcomeNotificationOnStartup": false,
+            "C_Cpp.updateChannel": "Insiders",
+            "pyqt-integration.qtdesigner.path": "F:\\Interpretation\\Python\\Python 3.7.7\\Lib\\site-packages\\pyqt5_tools\\Qt\\bin\\designer.exe",
+            "team.showWelcomeMessage": false,
+            "sync.forceUpload": true,
+            "git.autofetch": true,
+            "octave.clearPreviousOutput": true,
+            "terminal.integrated.shell.windows": "C:\\Users\\shado\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe",
+            "julia.enableTelemetry": true,
+            "cmake.configureOnOpen": true,
+            "julia.trace.server": "messages",
+            "julia.enableCrashReporter": true,
+            "julia.additionalArgs": [],
+            "julia.environmentPath": "",
+            "julia.executablePath": "D:\\Professional\\Interpretation\\Julia\\Julia-1.4.2\\bin\\julia.exe",
+            "r.alwaysUseActiveTerminal": true,
+            "r.bracketedPaste": true,
+            "sync.gist": "75c878b8e7d2f0d4ac067efee4ea21ce",
+            "java.semanticHighlighting.enabled": true,
+            "r.lsp.debug": true,
+            "code-runner.ignoreSelection": true,
+            "code-runner.languageIdToFileExtensionMap": {},
+            "code-runner.executorMap": {},
+            "code-runner.executorMapByFileExtension": {},
+            "code-runner.executorMapByGlob": {},
+            "materialTheme.accent": "Sky",
+            "python.languageServer": "Pylance",
+            "http.proxySupport": "off",
+            "sonarlint.rules": {
+                "python:S3776": {
+                    "level": "off"
+                }
+            },
+            "rust-client.rlsPath": "",
+            "window.zoomLevel": -1,
+            "mssql.connections": [
+                {
+                    "server": "localhost",
+                    "database": "WebEngineering",
+                    "authenticationType": "Integrated",
+                    "profileName": "WebEngineering",
+                    "password": ""
+                },
+                {
+                    "server": "localhost",
+                    "database": "master",
+                    "authenticationType": "Integrated",
+                    "profileName": "MicrosoftSQL Server",
+                    "password": ""
+                }
+            ],
+            "oracledevtools.bookmarkFileFolder": "C:\\Users\\23825\\Oracle\\oracle.oracledevtools",
+            "oracledevtools.connectionConfiguration.configFilesFolder": "C:\\Users\\23825\\Oracle\\network\\admin",
+            "oracledevtools.connectionConfiguration.walletFileFolder": "C:\\Users\\23825\\Oracle\\network\\admin",
+            "remote.WSL.debug": true,
+            "remote.WSL.fileWatcher.polling": true,
+            "python.analysis.completeFunctionParens": true,
+            "jupyter.sendSelectionToInteractiveWindow": true,
+            "jupyter.allowUnauthorizedRemoteConnection": true,
+            "jupyter.alwaysScrollOnNewCell": true,
+            "jupyter.changeDirOnImportExport": true,
+            "tabnine.experimentalAutoImports": true,
+            "java.home": "D:\\Professional\\Interpretation\\Java\\RedHat\\11",
+            "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xms128m -Xmx512m ",
+            "python.condaPath": "D:/Professional/Interpretation/Python/Anaconda/_conda.exe",
+            "editor.tabCompletion": "on",
+            "workbench.preferredHighContrastColorTheme": "Material Theme Lighter",
+            "[html]": {
+                "editor.defaultFormatter": "esbenp.prettier-vscode"
+            },
+            "files.exclude": {
+                "**/.classpath": true,
+                "**/.factorypath": true,
+                "**/.idea": true,
+                "**/.project": true,
+                "**/.settings": true
+            },
+            "cmake.generator": "",
+            "[json]": {
+                "editor.defaultFormatter": "esbenp.prettier-vscode"
+            },
+            "java.configuration.runtimes": [],
+            "java.maven.downloadSources": true,
+            "java.maven.updateSnapshots": true,
+            "maven.pomfile.autoUpdateEffectivePOM": true,
+            "maven.terminal.useJavaHome": true,
+            "terminal.integrated.commandsToSkipShell": [
+                "language-julia.interrupt"
+            ],
+            "aiXcoder.searchIntegratedWindow": true,
+            "path-intellisense.absolutePathToWorkspace": false,
+            "better-comments.tags": [
+                {
+                    "tag": "#",
+                    "color": "#3498DB",
+                    "strikethrough": false,
+                    "underline": false,
+                    "backgroundColor": "transparent",
+                    "bold": false,
+                    "italic": false
+                },
+                {
+                    "tag": "!",
+                    "color": "#FF2D00",
+                    "strikethrough": false,
+                    "underline": false,
+                    "backgroundColor": "transparent",
+                    "bold": false,
+                    "italic": false
+                },
+                {
+                    "tag": "?",
+                    "color": "#3498DB",
+                    "strikethrough": false,
+                    "underline": false,
+                    "backgroundColor": "transparent",
+                    "bold": false,
+                    "italic": false
+                },
+                {
+                    "tag": "//",
+                    "color": "#474747",
+                    "strikethrough": true,
+                    "underline": false,
+                    "backgroundColor": "transparent",
+                    "bold": false,
+                    "italic": false
+                },
+                {
+                    "tag": "todo",
+                    "color": "#FF8C00",
+                    "strikethrough": false,
+                    "underline": false,
+                    "backgroundColor": "transparent",
+                    "bold": false,
+                    "italic": false
+                },
+                {
+                    "tag": "*",
+                    "color": "#98C379",
+                    "strikethrough": false,
+                    "underline": false,
+                    "backgroundColor": "transparent",
+                    "bold": false,
+                    "italic": false
+                }
+            ],
+            "django.snippets.exclude": [
+                "cms",
+                "wagtail"
+            ],
+            "compile-hero.generate-minified-html": true,
+            "compile-hero.generate-minified-javascript": true,
+            "compile-hero.generate-minified-css": true,
+            "prettier.vueIndentScriptAndStyle": true,
+            "apexSql.servers": [
+                {
+                    "connectionId": "405542b8-a5e0-48d1-95d8-8ac24965e828",
+                    "connectionName": "localhost:3306 (root)",
+                    "database": null,
+                    "executionTimeout": 7200,
+                    "connectionType": 0,
+                    "locationSSH": "",
+                    "passphraseSSH": "",
+                    "password": "NDBLaXie8d6waBJWLye16A83kMBPFKnFv1VDdXG66f1B6aD8HNXFd2EMa9E066PTm8llgdUYZ/w=",
+                    "saveCredentials": true,
+                    "passwordSSH": "",
+                    "pipename": "MySQL",
+                    "port": 3306,
+                    "portSSH": 22,
+                    "server": "localhost",
+                    "serverSSH": "",
+                    "serverType": 0,
+                    "showSystemDatabases": false,
+                    "timeout": 15,
+                    "username": "root",
+                    "userSSH": "",
+                    "useSSHKey": false,
+                    "caFileSSL": "",
+                    "certFileSSL": "",
+                    "keyFileSSL": ""
+                }
+            ],
+            "mssql.enableQueryHistoryCapture": true,
+            "vscode-mysql.enableDelimiter": true,
+            "mssql.showBatchTime": true,
+            "python.showStartPage": false,
+            "vsicons.dontShowNewVersionMessage": true,
+            "terminal.integrated.copyOnSelection": true,
+            "terminal.integrated.cursorBlinking": true,
+            "terminal.integrated.cursorStyle": "line",
+            "terminal.integrated.cursorWidth": 3,
+            "terminal.integrated.scrollback": 100000,
+            "terminal.integrated.sendKeybindingsToShell": true,
+            "editor.fontWeight": null,
+            "gitlens.advanced.fileHistoryFollowsRenames": true,
+            "gitlens.advanced.fileHistoryShowAllBranches": true,
+            "pylance.insidersChannel": "daily",
+            "python.analysis.typeCheckingMode": "basic",
+            "sonarlint.pathToNodeExecutable": "D:\\\\Professional\\\\Interpretation\\\\Nodejs\\\\node.exe",
+            "jupyter.alwaysTrustNotebooks": true,
+            "maven.executable.path": "D:\\Professional\\Interpretation\\Java\\Maven\\apache-maven-3.6.3\\bin\\mvn.cmd",
+            "vs-kubernetes": {
+                "vscode-kubernetes.minikube-path.windows": "C:\\Users\\shado\\.vs-kubernetes\\tools\\minikube\\windows-amd64\\minikube.exe",
+                "vscode-kubernetes.helm-path.windows": "C:\\Users\\shado\\.vs-kubernetes\\tools\\helm\\windows-amd64\\helm.exe"
+            },
+            "workbench.editorAssociations": {
+                "*.md": "default",
+                "*.pdf": "cweijan.officeViewer",
+                "*.ipynb": "jupyter-notebook",
+                "*.png": "imagePreview.previewEditor"
+            },
+            "go.toolsManagement.autoUpdate": true,
+            "editor.linkedEditing": true,
+            "markdown-preview-enhanced.HTML5EmbedUseLinkSyntax": true,
+            "leetcode.workspaceFolder": "e:\\Learning\\Programming\\Leetcode",
+            "editor.stickyTabStops": true,
+            "editor.cursorSmoothCaretAnimation": true,
+            "workbench.list.smoothScrolling": true,
+            "search.collapseResults": "auto",
+            "debug.terminal.clearBeforeReusing": true,
+            "timeline.pageOnScroll": true,
+            "database-client.showUser": true,
+            "database-client.showTrigger": true,
+            "database-client.showQuery": true,
+            "todo-tree.filtering.includeHiddenFiles": true,
+            "todo-tree.general.debug": true,
+            "todo-tree.highlights.useColourScheme": true,
+            "todo-tree.tree.showCountsInTree": true,
+            "python.pythonPath": "D:/Professional/Interpretation/Python/Anaconda/python.exe",
+            "html.trace": "verbose",
+            "masmtasm.ASM.MASMorTASM": "MASM",
+            "search.useGlobalIgnoreFiles": true,
+            "git.alwaysShowStagedChangesResourceGroup": true,
+            "git.autoStash": true,
+            "git.fetchOnPull": true,
+            "markdown-preview-enhanced.usePandocParser": true,
+            "markdown-preview-enhanced.enableExtendedTableSyntax": true,
+            "markdown-preview-enhanced.enableHTML5Embed": true,
+            "markdown-preview-enhanced.enableTypographer": true,
+            "markdown-preview-enhanced.revealjsTheme": "night.css",
+            "markdown-preview-enhanced.previewTheme": "github-dark.css",
+            "markdown-preview-enhanced.mermaidTheme": "dark",
+            "pandoc.htmlOptString": "-s -f gfm -t html5 --css=css/style.css",
+            "pandoc-format.command": "pandoc --standalone --atx-headers --wrap=none --columns=999 -f markdown-auto_identifiers -t markdown-simple_tables-multiline_tables-grid_tables-auto_identifiers",
+            "terminal.integrated.minimumContrastRatio": 7,
+            "pandoc.executable": "C:\\Program Files\\Pandoc\\pandoc.exe",
+            "markdown-preview-enhanced.pandocPath": "C:/Program Files/Pandoc/pandoc.exe",
+            "vscode-office.autoTheme": true,
+            "vscode-office.viewAbsoluteLocal": true,
+            "files.maxMemoryForLargeFilesMB": 16384,
+            "git.ignoreLegacyWarning": true,
+            "git.path": "D:\\Professional\\Git\\Git\\bin\\git.exe",
+            "markdown.trace": "verbose",
+            "markdown-image.coding.path": "/assets/images",
+            "MarkdownPaste.silence": true,
+            "markdown.extension.list.indentationSize": "inherit",
+            "markdown.extension.tableFormatter.normalizeIndentation": true,
+            "markdown-preview-enhanced.frontMatterRenderingOption": "code block",
+            "MarkdownPaste.path": "./images",
+            "markdown.extension.toc.slugifyMode": "vscode",
+            "markdown-pdf.highlightStyle": "dark.css",
+            "markdown.styles": [
+                "essay.css",
+                "article.css"
+            ],
+            "security.workspace.trust.enabled": true,
+            "merge-conflict.autoNavigateNextConflict.enabled": true,
+            "javascript.format.insertSpaceAfterConstructor": true,
+            "C_Cpp.autocompleteAddParentheses": true,
+            "C_Cpp.default.cStandard": "c17",
+            "cSpell.enableFiletypes": [
+                "!cmake-cache",
+                "clojure"
+            ],
+            "github.codespaces.defaultExtensions": [
+                "GitHub.codespaces",
+                "GitHub.vscode-pull-request-github"
+            ],
+            "python.disableInstallationCheck": true,
+            "python.insidersChannel": "weekly",
+            "workbench.iconTheme": "material-icon-theme",
+            "todo-tree.general.tags": [
+                "BUG",
+                "HACK",
+                "FIXME",
+                "TODO",
+                "XXX",
+                "[ ]",
+                "[x]"
+            ],
+            "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+            "security.workspace.trust.untrustedFiles": "open",
+            "cSpell.language": "en,en-GB,en-US",
+            "browser-preview.chromeExecutable": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+            "redhat.telemetry.enabled": true,
+            "python.venvFolders": [
+                "envs",
+                ".pyenv",
+                ".direnv",
+                ".env",
+                ".venv",
+                "venv",
+                "env"
+            ],
+            "python.venvPath": "~/.pyenv, ~/Envs, ~/.virtualenvs,~/.pyenv, ~/direnv, ~/.env,~/.venv ,~/venv,~/env",
+            "markdown.extension.syntax.plainTheme": true,
+            "search.smartCase": true,
+            "search.seedWithNearestWord": true,
+            "problems.showCurrentInStatus": true,
+            "[java]": {
+                "editor.defaultFormatter": "redhat.java"
+            },
+            "[c]": {
+                "editor.wordBasedSuggestions": false,
+                "editor.suggest.insertMode": "replace",
+                "editor.semanticHighlighting.enabled": true
+            },
+            "C_Cpp.addNodeAddonIncludePaths": true,
+            "editor.inlineSuggest.enabled": true,
+            "github.copilot.autocomplete.count": 5,
+            "github.copilot.autocomplete.enable": true,
+            "github.copilot.inlineSuggest.count": 5,
+            "github.copilot.enable": {
+                "*": true,
+                "yaml": true,
+                "plaintext": true,
+                "markdown": true
+            },
+            "local-history.saveDelay": 600,
+            "notebook.cellToolbarLocation": {
+                "default": "right",
+                "jupyter-notebook": "left"
+            },
+            "python.defaultInterpreterPath": "D:/Professional/Interpretation/Python/Anaconda/python.exe",
+            "[markdown]": {
+                "editor.defaultFormatter": "darkriszty.markdown-table-prettify"
+            },
+            "markdownlint.customRules": [
+                "{docsmsft.docs-linting}/markdownlint-custom-rules/rules.js"
+            ],
+            "markdownlint.config": {
+                "MD028": false,
+                "MD025": {
+                    "front_matter_title": ""
+                }
+            },
+            "terminal.integrated.gpuAcceleration": "on",
+            "[python]": {
+                "editor.defaultFormatter": "ms-python.python"
+            },
+            "python.diagnostics.sourceMapsEnabled": true,
+            "python.globalModuleInstallation": true,
+            "python.formatting.provider": "black",
+            "python.testing.pytestEnabled": true,
+            "[latex]": {
+                "editor.defaultFormatter": "James-Yu.latex-workshop"
+            },
+            "latex-workshop.bibtex-format.tab": "4 spaces",
+            "latex-workshop.latex.autoBuild.run": "never",
+            "latex-workshop.latex.autoClean.run": "onBuilt",
+            "gitlens.gitCommands.skipConfirmations": [
+                "fetch:command",
+                "stash-push:command",
+                "switch:command",
+                "push:command"
+            ],
+            "preview.previewTheme": "Dark",
+            "gitlens.views.repositories.branches.layout": "list",
+            "codeQL.telemetry.enableTelemetry": false,
+            "AREPL.envFile": "${workspaceFolder}/env",
+            "markdown-preview-enhanced.enableScriptExecution": true,
+            "editor.largeFileOptimizations": false,
+            "livePreview.showServerStatusNotifications": true,
+            "livePreview.debugOnExternalPreview": true,
+            "powershell.powerShellDefaultVersion": "PowerShell (Store)",
+            "autoDocstring.includeExtendedSummary": true,
+            "autoDocstring.includeName": true,
+            "autoDocstring.startOnNewLine": true,
+            "fileheader.configObj": {
+                "filePathColon": "/",
+                "createFileTime": true,
+                "language": {
+                    "languagetest": {
+                        "head": "/$$",
+                        "middle": " $ @",
+                        "end": " $/"
+                    },
+                    "js": {
+                        "head": "/$$",
+                        "middle": " $ @",
+                        "end": " $/",
+                        "functionSymbol": {
+                            "head": "/* ",
+                            "middle": "*@",
+                            "end": " */"
+                        }
+                    },
+                    "h/hpp/cpp": {
+                        "head": "/* ",
+                        "middle": "*@",
+                        "end": " */"
+                    },
+                    "blade.php": {
+                        "head": "<!--",
+                        "middle": "*@",
+                        "end": "-->"
+                    },
+                    "py/pyd": {
+                        "head": "'''",
+                        "middle": "#@",
+                        "end": "'''"
+                    }
+                },
+                "autoAdd": true,
+                "autoAddLine": 10000,
+                "autoAlready": true,
+                "annotationStr": {
+                    "head": "/*",
+                    "middle": "#@",
+                    "end": " */",
+                    "use": true
+                },
+                "headInsertLine": {
+                    "php": 2,
+                    "sh": 2
+                },
+                "beforeAnnotation": {
+                    "py": "#!./env python\n# -*- coding: utf-8 -*-",
+                    "*": "\n"
+                },
+                "afterAnnotation": {
+                    "文件后缀": "该文件后缀的头部注释之后添加某些内容"
+                },
+                "specialOptions": {
+                    "Date": "Time",
+                    "LastEditTime": "LastTime",
+                    "LastEditors": "LastAuthor"
+                },
+                "switch": {
+                    "newlineAddAnnotation": true
+                },
+                "supportAutoLanguage": [],
+                "prohibitAutoAdd": [
+                    "json"
+                ],
+                "folderBlacklist": [
+                    "node_modules",
+                    "env",
+                    ".vscode",
+                    ".history",
+                    ".VsCodeCounter",
+                    "文件夹禁止自动添加头部注释"
+                ],
+                "prohibitItemAutoAdd": [
+                    "项目的全称, 整个项目禁止自动添加头部注释, 可以使用快捷键添加"
+                ],
+                "moveCursor": true,
+                "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                "atSymbol": [
+                    "@",
+                    "@"
+                ],
+                "atSymbolObj": {
+                    "文件后缀": [
+                        "头部注释@符号",
+                        "函数注释@符号"
+                    ]
+                },
+                "colon": [
+                    ": ",
+                    ": "
+                ],
+                "colonObj": {
+                    "文件后缀": [
+                        "头部注释冒号",
+                        "函数注释冒号"
+                    ]
+                },
+                "showErrorMessage": false,
+                "writeLog": false,
+                "wideSame": true,
+                "wideNum": 17,
+                "functionWideNum": 0,
+                "CheckFileChange": true,
+                "createHeader": true,
+                "useWorker": false,
+                "designAddHead": true,
+                "headDesignName": "random",
+                "headDesign": false,
+                "cursorModeInternalAll": {},
+                "openFunctionParamsCheck": true,
+                "functionParamsShape": [
+                    "{",
+                    "}"
+                ],
+                "functionBlankSpaceAll": {},
+                "functionTypeSymbol": "*",
+                "typeParamOrder": "type param",
+                "customHasHeadEnd": {},
+                "throttleTime": 60000
+            },
+            "fileheader.customMade": {
+                "Date": "Do not edit",
+                "Author": "Albert Wang",
+                "Email": "shadowofgost@outlook.com",
+                "Software": "Vscode",
+                "FilePath": "Do not edit",
+                "Copyright Notice": "Copyright 2021 Albert Wang 王子睿, All Rights Reserved.",
+                "custom_string_obkoro1_copyright": "Copyright ${now_year} Albert Wang 王子睿, All Rights Reserved.",
+                "Description": "",
+                "LastEditTime": "Do not edit",
+                "LastEditors": "Albert Wang"
+            },
+            "fileheader.cursorMode": {
+                "description": ""
+            },
+            "sqlalchemy-schema.TypeMapper": {},
+            "hediet.vscode-drawio.local-storage": "eyIuZHJhd2lvLWNvbmZpZyI6IntcImxhbmd1YWdlXCI6XCJcIixcImN1c3RvbUZvbnRzXCI6W10sXCJsaWJyYXJpZXNcIjpcImdlbmVyYWw7YmFzaWM7YXJyb3dzMjtjbGlwYXJ0O2Zsb3djaGFydDttb2NrdXBzO3VtbFwiLFwiY3VzdG9tTGlicmFyaWVzXCI6W1wiTC5zY3JhdGNocGFkXCJdLFwicGx1Z2luc1wiOltdLFwicmVjZW50Q29sb3JzXCI6W10sXCJmb3JtYXRXaWR0aFwiOjI0MCxcImNyZWF0ZVRhcmdldFwiOmZhbHNlLFwicGFnZUZvcm1hdFwiOntcInhcIjowLFwieVwiOjAsXCJ3aWR0aFwiOjgyNyxcImhlaWdodFwiOjExNjl9LFwic2VhcmNoXCI6dHJ1ZSxcInNob3dTdGFydFNjcmVlblwiOnRydWUsXCJncmlkQ29sb3JcIjpcIiNkMGQwZDBcIixcImRhcmtHcmlkQ29sb3JcIjpcIiM2ZTZlNmVcIixcImF1dG9zYXZlXCI6dHJ1ZSxcInJlc2l6ZUltYWdlc1wiOm51bGwsXCJvcGVuQ291bnRlclwiOjAsXCJ2ZXJzaW9uXCI6MTgsXCJ1bml0XCI6MSxcImlzUnVsZXJPblwiOmZhbHNlLFwidWlcIjpcIlwifSJ9",
+            "editor.accessibilitySupport": "off",
+            "editor.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "terminal.integrated.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "editor.codeLensFontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "editor.inlayHints.fontFamily": "JetBrainsMono Nerd Font Mono",
+            "pythonPreview.code.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "pythonPreview.fontFamily": "verdana, arial, helvetica, sans-serif,JetBrainsMonoExtraBold Nerd Font Mono",
+            "pythonPreview.legend.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "scm.inputFontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "debug.console.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "workbench.colorTheme": "GitHub Dark Dimmed",
+            "editor.inlayHints.fontSize": 14,
+            "scm.inputFontSize": 14,
+            "testing.automaticallyOpenPeekViewDuringAutoRun": true,
+            "files.saveConflictResolution": "overwriteFileOnDisk",
+            "pythonPreview.codeFooterDocs.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "pythonPreview.compactFuncLabels": true,
+            "pythonPreview.disableHeapNesting": true,
+            "pythonPreview.heapObject.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "pythonPreview.printOutputDocs.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "pythonPreview.stackAndHeapHeader.fontFamily": "JetBrainsMonoExtraBold Nerd Font Mono",
+            "pythonPreview.trace": "verbose",
+            "python.linting.ignorePatterns": [
+                "**/site-packages/**/*.py",
+                ".vscode/*.py",
+                ".history/**/*.py",
+                ".history/*.py",
+                "**/env/**/*.py"
+            ],
+            "livecode.envFile": "${workspaceFolder}/.env",
+            "python.linting.maxNumberOfProblems": 1000,
+            "python.linting.mypyEnabled": true,
+            "pythonIndent.useTabOnHangingIndent": true,
+            "vsintellicode.features.python.deepLearning": "enabled",
+            "python.linting.pylintEnabled": true,
+            "search.exclude": {
+                "**/.history": true,
+                "**/env": true
+            },
+            "terminal.external.windowsExec": "C:\\Users\\shado\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe",
+            "database-client.highlightSQLBlock": true,
+            "todo-tree.filtering.ignoreGitSubmodules": true,
+            "todo-tree.filtering.useBuiltInExcludes": "file and search excludes",
+            "VSCodeCounter.exclude": [
+                "**/.gitignore",
+                "**/.vscode/**",
+                "**/node_modules/**",
+                "**/.histoty/**",
+                "**/env/**"
+            ],
+            "files.watcherExclude": {
+                "**/.history/*/**": true
+            },
+            "python.analysis.diagnosticMode": "workspace",
+            "python.envFile": "${workspaceFolder}/env",
+            "python.linting.flake8Enabled": true,
+            "julia.symbolCacheDownload": true,
+            "hediet.vscode-drawio.codeLinkActivated": false,
+            "gitlens.views.remotes.branches.layout": "list",
+            "[vue]": {
+                "editor.defaultFormatter": "octref.vetur"
+            },
+            "vetur.format.options.tabSize": 4,
+            "vetur.format.options.useTabs": true,
+            "vetur.format.scriptInitialIndent": true,
+            "vetur.format.styleInitialIndent": true,
+            "prettier.enableDebugLogs": true,
+            "python.linting.enabled": false,
+            "C_Cpp.default.intelliSenseMode": "windows-gcc-x64",
+            "C_Cpp.vcFormat.indent.caseContentsWhenBlock": true,
+            "C_Cpp.vcFormat.indent.braces": true,
+            "C_Cpp.vcFormat.indent.accessSpecifiers": true,
+            "C_Cpp.vcFormat.indent.caseLabels": true,
+            "C_Cpp.vcFormat.space.beforeComma": true,
+            "C_Cpp.vcFormat.space.beforeEmptySquareBrackets": true,
+            "C_Cpp.vcFormat.space.betweenEmptyBraces": true,
+            "C_Cpp.vcFormat.space.beforeOpenSquareBracket": true,
+            "C_Cpp.vcFormat.space.betweenEmptyParameterListParentheses": true,
+            "C_Cpp.vcFormat.space.betweenEmptySquareBrackets": true,
+            "C_Cpp.vcFormat.space.insertAfterSemicolon": true,
+            "C_Cpp.vcFormat.space.withinSquareBrackets": true,
+            "C_Cpp.vcFormat.space.withinParameterListParentheses": true,
+            "C_Cpp.vcFormat.space.withinLambdaBrackets": true,
+            "C_Cpp.vcFormat.space.withinControlFlowStatementParentheses": true,
+            "C_Cpp.vcFormat.space.withinExpressionParentheses": true,
+            "C_Cpp.vcFormat.space.withinCastParentheses": true,
+            "clangd.checkUpdates": true,
+            "clangd.detectExtensionConflicts": false,
+            "cmake.installPrefix": "D:\\Professional\\Interpretation\\C\\Cmake\\install",
+            "explorer.copyRelativePathSeparator": "/",
+            "path-intellisense.autoSlashAfterDirectory": true,
+            "path-intellisense.extensionOnImport": true,
+            "cSpell.ignorePaths": [
+                "package-lock.json",
+                "node_modules",
+                "vscode-extension",
+                ".git/objects",
+                ".vscode",
+                ".vscode-insiders",
+                "env",
+                ".env"
+            ],
+            "markdownlint.focusMode": true
+        },
